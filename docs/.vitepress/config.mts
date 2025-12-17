@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Invariant Loop",
   description: "Invariant Loop Site",
+  base: '/site/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
