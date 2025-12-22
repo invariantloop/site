@@ -38,52 +38,35 @@ outline: deep
 
 ## Methods of Proving Theorems
 
-<aside>
-✅
+::: tip
+:white_check_mark: Use axioms, definitions, previously proved results, and rules of inference to complete the proof
+:::
 
-Use axioms, definitions, previously proved results, and rules of inference to complete the proof
-
-</aside>
-
-<aside>
-✅
-
-To prove a theorem of the form **$\forall x(P(x) \rightarrow Q(x))$,** should apply [**universal generalization**](1_4-rule-of-inference)
-
-</aside>
+::: tip
+:white_check_mark: To prove a theorem of the form **$\forall x(P(x) \rightarrow Q(x))$,** should apply [**universal generalization**](1_4-rule-of-inference)
+:::
 
 - That means, we need to prove $P(c) \rightarrow Q(c)$, for arbitrary c. In this case, we prove a conditional statement is true
 - Recall, $p \rightarrow q$ is true unless p is true but q is false
 
-<aside>
-✅
-
-For $p \rightarrow q$ is true, we only need to prove **q is true if p is true**
-
-</aside>
+::: tip
+:white_check_mark: For $p \rightarrow q$ is true, we only need to prove **q is true if p is true**
+:::
 
 ## Direct Proofs
 
 - Lead from the premises of a theorem to the conclusion
 
-<aside>
-✅
-
-We assume **directly** $p = true$, then $q$ must also be true
-
-</aside>
+> :white_check_mark: We assume **directly** $p = true$, then $q$ must also be true
 
 ## Proof by contraposition  (Phản đảo)
 
 - We will see that attempts at direct proofs often reach **dead ends**
 - An extremely useful type of indirect proof is known as proof by contraposition
 
-<aside>
-✅
-
+::: tip
 Make use of the fact that the conditional statement $p \rightarrow q$ is equivalent to its contrapositive, $¬q → ¬p$
-
-</aside>
+:::
 
 ### Vacuous proofs (Chứng minh rỗng)
 
@@ -95,41 +78,36 @@ Make use of the fact that the conditional statement $p \rightarrow q$ is equival
 
 ## Proof by contradiction  (Phản chứng)
 
+::: info
 - (1) Assume $¬p$ is true
 - (2) Then prove that $\neg p \rightarrow q \space is \space true$
 - (3) $q$ must be false, such as $q = r \wedge \neg r$
 - Because q is false (3) and (2) true, then $\neg p$ must be false
 - p is true
+:::
 
 ## Proofs of equivalence
 
-<aside>
-✅
-
-Prove $(p ↔ q) ↔ (p → q) ∧ (q → p)$
-
-</aside>
+::: tip Prove
+$$
+(p ↔ q) ↔ (p → q) ∧ (q → p)
+$$
+:::
 
 ## Proof by cases
 
 - We now introduce a method that can be used to prove a theorem by considering different cases
   separately, that means:
 
-<aside>
-✅
-
-$(p_1 \vee p_2 \vee ... \vee p_n) \rightarrow q$
-
-</aside>
+$$
+(p_1 \vee p_2 \vee ... \vee p_n) \rightarrow q
+$$
 
 - Then, make it tautology:
 
-<aside>
-✅
-
-$(p_1 \vee p_2 \vee ... \vee p_n) \rightarrow q \space \leftrightarrow	 [(p_1 \rightarrow q) \wedge (p_2 \rightarrow q) ... \wedge ... (p_n \rightarrow q)]$
-
-</aside>
+$$
+(p_1 \vee p_2 \vee ... \vee p_n) \rightarrow q \space \leftrightarrow	 [(p_1 \rightarrow q) \wedge (p_2 \rightarrow q) ... \wedge ... (p_n \rightarrow q)]
+$$
 
 - A proof by cases **must cover all possible cases that arise in a theorem**. We illustrate proof by cases with a couple of examples. In each example, you should check that all possible cases are covered
 
@@ -160,12 +138,7 @@ $(p_1 \vee p_2 \vee ... \vee p_n) \rightarrow q \space \leftrightarrow	 [(p_1 \r
 
 ## Existence Proof
 
-<aside>
-✅
-
-To prove a theorem of the form **$\exists xP(x)$**
-
-</aside>
+> To prove a theorem of the form **$\exists xP(x)$**
 
 - Some theorems state that **something exists** — typically written in the form **∃x P(x)** (there exists an x such that P(x) is true). A **proof** of this is called an **existence proof**, and there are two main types:
 
@@ -185,9 +158,4 @@ To prove a theorem of the form **$\exists xP(x)$**
     - **Existence:** Show that **at least one** element exists that satisfies the property.
     - **Uniqueness:** Show that **no other** element can have the same property — meaning: If two elements both satisfy the property, then they **must be equal**.
 
-<aside>
-✅
-
-To prove a theorem of the form **$\exists x(P(x) \wedge \forall y (y \neq x \rightarrow \neg P(y))$**
-
-</aside>
+> To prove a theorem of the form **$\exists x(P(x) \wedge \forall y (y \neq x \rightarrow \neg P(y))$**

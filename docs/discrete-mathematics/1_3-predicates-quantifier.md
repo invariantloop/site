@@ -13,12 +13,8 @@ outline: deep
 
 - Universal quantification of a $P(x)$ is
 
-<aside>
-💡
-
 $P(x)$ for all values of x **in a domain**
 
-</aside>
 
 - Notation $\forall x P(x)$ :
     - For every $x P(x)$
@@ -29,12 +25,7 @@ $P(x)$ for all values of x **in a domain**
 
 - Existential quantification of a $P(x)$ is
 
-<aside>
-💡
-
 There exists an element x **in a domain** such that $P(x)$
-
-</aside>
 
 - Notation $\exists x P(x)$ :
     - There is an x such that $P(x)$
@@ -75,12 +66,9 @@ There exists an element x **in a domain** such that $P(x)$
 - $∀x∀y((x > 0) ∧ (y < 0) → (xy < 0))$
   : For all real numbers x and y, if x is positive and y is negative, then the product of x and y is negative
 
-<aside>
-💡
-
+::: info
 Think of nested quantifiers like a 2 NESTED LOOP IN PROGRAMMING
-
-</aside>
+:::
 
 ## The Order of Quantifiers
 

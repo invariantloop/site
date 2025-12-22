@@ -4,14 +4,27 @@
 
 ![Figure 13.1.png](/images/dsa/rbt-Figure_13.1.png)
 
-1. Every node is either **RED** or **BLACK**
-2. The root is always **BLACK**
-3. Every leaf (NIL) is **BLACK**
-4. If a node is **RED**, then **both its children** are **BLACK**
+::: info 1
+> Every node is either **RED** or **BLACK**
+:::
 
-   ⇒ Cannot have 2 consecutive nodes on a arbitrary simple path both are **RED**
+::: info 2
+> The root is always **BLACK**
+:::
+> 
+::: info 3
+> Every leaf (NIL) is **BLACK**
+:::
+> 
+::: info 4
+> If a node is **RED**, then **both its children** are **BLACK**
+> 
+> => Cannot have 2 consecutive nodes on a arbitrary simple path both are **RED**
+:::
 
-5. For each node, all simple paths from the node to descendant leaves contain the **same number** of **BLACK** nodes.
+::: info 5
+> For each node, all simple paths from the node to descendant leaves contain the **same number** of **BLACK** nodes.
+:::
 
 ### Black-height
 

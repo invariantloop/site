@@ -1,50 +1,66 @@
+---
+outline: deep
+---
+
 ## 1. Background
 
 - Q1: What does transport-layer protocol do?
-    - A **transport-layer protocol** **provides** for **logical communication** between **application processes** running on different hosts.
+> A **transport-layer protocol** **provides** for **logical communication** between **application processes** running on different hosts.
 - Q2: What is logical communication?
-    - **Logical communication** means from an application’s perspective it is as if the hosts running the processes were directly connected but in reality, the hosts may be on opposite sides of the planet
+> **Logical communication** means from an application’s perspective it is as if the hosts running the processes were directly connected but in reality, the hosts may be on opposite sides of the planet
 
-      ![image.png](../public/images/networking/tlp-image.png)
+![image.png](../public/images/networking/tlp-image.png)
 
 - Q3: Where is transport-layer protocol implemented?
-    - At end systems
-- Q4: What is mean of communication between application layer ↔ transport layer?
-    - Via a **interface** named [**SOCKET**](https://www.notion.so/Process-283b90defeae80a1b4dfed8f4bd78003?pvs=21)
-- Q5: How many protocols are there in transport layer?
-    - TCP and UDP
+> At end systems
+- Q4: What is the mean of communication between application layer ↔ transport layer?
+> Via an **interface** named [**SOCKET**]()
+
+- Q5: How many protocols are there in the transport layer?
+> TCP and UDP
+
 - Q6: A quick description when sending data between processes?
-    - On sending side:
-        - Transport layer **convert** application-layer message into smaller chunk and add **header** to create a **segment**
-        - Transport layer then **passes** the segment to **network layer** (I’ll stop right here and continue to introduce in network layer chapter)
-    - On the receiving side:
-        - The network layer **extracts** the transport-layer **segment** then **segment up** to transport layer
+>    - On the sending side:
+>
+>        - Transport layer **convert** application-layer message into smaller chunk and add **header** to create a **segment**
+>
+>        - Transport layer then **passes** the segment to **network layer** (I’ll stop right here and continue to introduce in network layer chapter)
+>    - On the receiving side:
+>
+>        - The network layer **extracts** the transport-layer **segment** then **segment up** to transport layer
 - Q7: Relationship between transport layer and network layer?
-    - A **transport-layer protocol** **provides** for **logical communication** between **application processes** running on different hosts.
-    - A **network-layer protocol** **provides** for **logical communication** between **hosts**.
+> - A **transport-layer protocol** **provides** for **logical communication** between **application processes** running on different hosts.
+> 
+> - A **network-layer protocol** **provides** for **logical communication** between **hosts**.
 - Q8: What is the most fundamental responsibility of transport layer protocol?
-    - **Extend** IP’s delivery service between **two end systems** → a delivery service between **two processes** running on the end systems
-    - **Extending** host-to-host delivery → process-to-process delivery is called transport-layer multiplexing and demultiplexing.
+>   - **Extend** IP’s delivery service between **two end systems** → a delivery service between **two processes** running on the end systems
+>
+>   - **Extending** host-to-host delivery → process-to-process delivery is called transport-layer multiplexing and demultiplexing.
 
 ## 2. Multiplexing and Demultiplexing
-
 - Q1: Short description about **socket**?
-    - Each process can have one more multiple **sockets**
-    - **Sockets** is a intermediary between processes and transport layer
-    - Each **socket** has **a unique identifier**
+>   - Each process can have one more multiple **sockets**
+>
+>   - **Sockets** is a intermediary between processes and transport layer
+>
+>   - Each **socket** has **a unique identifier**
 - Q2: How the multiplexing works?
-    - The job of gathering data chunks at the source host from **different sockets**
-    - Encapsulating each data chunk with header information (that will later be used in demultiplexing) to create segments
-    - Then passing the segments to the network layer
+>   - The job of gathering data chunks at the source host from **different sockets**
+>
+>   - Encapsulating each data chunk with header information (that will later be used in demultiplexing) to create segments
+>
+>   - Then passing the segments to the network layer
 - Q3: How the demultiplexing works?
-    - The job of examining some set of fields in a segment to identify the **receiving socket**
-    - Delivering data to **correct socket**
+>   - The job of examining some set of fields in a segment to identify the **receiving socket**
+>
+>   - Delivering data to **correct socket**
+
 
 ![image.png](/images/networking/tlp-image-1.png)
 
-- Motivation
-    - **In multiplexing/demultiplexing, What factors do we need to identify correct sockets?**
-- Solution
+- **Motivation**
+> **In multiplexing/demultiplexing, What factors do we need to identify correct sockets?**
+- **Solution**
     - We know that transport-layer multiplexing requires
         - Sockets have unique identifiers
         - Each segment has special fields that indicate the socket to which the segment is to be delivered
@@ -79,19 +95,19 @@
 ## 3. Connectionless Transport: UDP
 
 - Q1: Why is UDP considered connectionless?
-    - UDP is said to be **connectionless** because there is **no handshaking** between sending and receiving transport-layer entities before sending a segment
+> UDP is said to be **connectionless** because there is **no handshaking** between sending and receiving transport-layer entities before sending a segment
 - Q2: List some applications use UDP?
-
   ![image.png](/images/networking/tlp-image-4.png)
-
-
 - Q3: Why an application developer would ever choose to build an application over UDP rather than over TCP?
-    - Finer application-level control over what data is sent and when
-    - No connection establishment
-    - No connection state
-    - Small packet header overhead (UDP only has 8-bytes header)
+>   - Finer application-level control over what data is sent and when
+>
+>   - No connection establishment
+>
+>   - No connection state
+>
+>   - Small packet header overhead (UDP only has 8-bytes header)
 - Q4: How to make reliable data over UDP?
-    - This can be done if reliability is built into the application itself (for example, by **adding acknowledgment** and **retransmission mechanisms**)
+> This can be done if reliability is built into the application itself (for example, by **adding acknowledgment** and **retransmission mechanisms**)
 - Q5: UDP Segment Structure
 
   ![image.png](/images/networking/tlp-image-5.png)
@@ -100,20 +116,23 @@
 ## 4. Principles of Reliable Data Transfer (*)
 
 - Q1: What does RDT do?
-    - It is the responsibility of a reliable data transfer protocol to implement **service abstraction**
-    - The **service abstraction** provided to the upper-layer entities is that of a reliable channel through which data can be transferred
+>   - It is the responsibility of a reliable data transfer protocol to implement **service abstraction**
+>   - The **service abstraction** provided to the upper-layer entities is that of a reliable channel through which data can be transferred
 
-      ![image.png](/images/networking/tlp-image-6.png)
+![image.png](/images/networking/tlp-image-6.png)
 
 
-    - Even though lower-layer of RDT can be unreliable channel, RDT is also responsible for making sure data transferred is safe.
+>   - Even though lower-layer of RDT can be unreliable channel, RDT is also responsible for making sure data transferred is safe.
 - Q2: What is implementation of RDT?
-    - **ARQ** (Automatic Repeat reQuest) protocols
-    - **Three additional** protocol **capabilities** are required in **ARQ**
+>   - **ARQ** (Automatic Repeat reQuest) protocols
+>
+>   - **Three additional** protocol **capabilities** are required in **ARQ**
       protocols to handle the presence of bit errors:
-        - **Error detection:** allow the receiver to **detect** when **bit errors have occurred**.
-        - **Receiver feedback:** the receiver to provide explicit feedback to the sender. The positive (ACK) and negative (NAK) acknowledgment
-        - **Retransmission:** A packet that is received in error at the receiver will be retransmitted by the sender
+>       - **Error detection:** allow the receiver to **detect** when **bit errors have occurred**.
+>
+>       - **Receiver feedback:** the receiver to provide explicit feedback to the sender. The positive (ACK) and negative (NAK) acknowledgment
+>
+>       - **Retransmission:** A packet that is received in error at the receiver will be retransmitted by the sender
 - From now on, we’ll use **The finite-state machine (FSM)** to describe RDT protocols:
     - Three main factors are used in FSM: **states**, **events** and **actions**
     - Switch from state 1 to state 2 is called a **transition**
@@ -175,9 +194,9 @@
 ![image.png](/images/networking/tlp-image-13.png)
 
 - Q1: How long must the sender wait to be certain that something has been lost?
-    - **At least** as long as a **round-trip delay** between the sender and receiver
+> **At least** as long as a **round-trip delay** between the sender and receiver
 - Q2: In rdt3.0, it introduces the possibility of duplicate data packets?
-    - Happily, protocol rdt2.2 already has enough functionality (that is, sequence numbers) to handle the case of duplicate packets.
+> Happily, protocol rdt2.2 already has enough functionality (that is, sequence numbers) to handle the case of duplicate packets.
 
 ## 5. Pipelined Reliable Data Transfer Protocols
 
@@ -268,27 +287,30 @@
 ## 6. Connection-Oriented Transport: TCP
 
 - Q1: Why is TCP considered connection-oriented?
-    - Two processes **must** first **“handshake”** with each other before one application process can begin to send data to another,  **“handshake”** often referred to as a **three-way handshake**.
-    - A TCP connection is also **always point-to-point**
+>   - Two processes **must** first **“handshake”** with each other before one application process can begin to send data to another,  **“handshake”** often referred to as a **three-way handshake**.
+>
+>   - A TCP connection is also **always point-to-point**
 - Q2: Which communication protocols does TCP provide?
-    - A TCP connection provides a **full-duplex service**
+>   - A TCP connection provides a **full-duplex service**
 - Q3: What is buffer?
-    - Created during the initial three-way handshake
-    - Each TCP connection has its own **send buffer** and **receive buffer**
+>   - Created during the initial three-way handshake
+>
+>   - Each TCP connection has its own **send buffer** and **receive buffer**
 - Q4: What is Maximum Segment Size (MSS)?
-    - It is the maximum size of application-layer data (payload) that TCP can place into a TCP segment.
-    - Not including **TCP header + IP header**.
+>   - It is the maximum size of application-layer data (payload) that TCP can place into a TCP segment.
+>
+>   - Not including **TCP header + IP header**.
 - Q5: TCP Segment Structure
 
   ![image.png](/images/networking/tlp-image-21.png)
 
 - Q6: What are important fields in TCP Segment Structure?
-    - **Two** of the most important **fields** in the TCP segment header are **the sequence number**
+>   - **Two** of the most important **fields** in the TCP segment header are **the sequence number**
       field and **the acknowledgment number** field
 - Q7: What is TCP’s perspective about data?
-    - TCP views data as an **unstructured but ordered stream of bytes**
+>   - TCP views data as an **unstructured but ordered stream of bytes**
 
-### **6. 1  The sequence number** field
+### **6.1 The sequence number** field
 
 - **Sequence numbers** in TCP are assigned over the **byte stream**, not over the segments themselves.
 - **The sequence number** for a segment is therefore the byte-stream number of the **first byte** in the segment
@@ -302,7 +324,7 @@
         - Segment 3: starts at byte **2000** → Sequence Number = 2000
         - … up to Segment 500: starts at byte **499,000** → Sequence Number = 499,000
 
-### **6. 2  The acknowledgment**  field
+### **6.2 The acknowledgment** field
 
 - **Acknowledgment (ACK) number** = the sequence number of the **next byte expected**.
 - Since TCP is **full-duplex**, each side (Host A and Host B) maintains its own sequence numbers and acknowledgment numbers independently.
@@ -311,7 +333,7 @@
   👉 “I have received everything up to byte X–1, and now I expect byte X.”
 
 - Example:
-    - Host A received  a **byte-stream from 0 to 535** by host B.
+    - Host A received a **byte-stream from 0 to 535** by host B.
     - Expected next byte A waiting for is **536**.
     - Then A send a segment to B, in header will have:
         - **ACK = 536**
@@ -345,7 +367,7 @@
     - **Timeout (loss detected)**
     - **3 duplicate ACKs**
 
-### 7. 1 Slow start
+### 7.1 Slow start
 
 ![image.png](/images/networking/tlp-image-28.png)
 
