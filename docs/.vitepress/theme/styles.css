@@ -1,0 +1,81 @@
+:root {
+    --vp-home-hero-name-color: transparent;
+    --vp-home-hero-name-background: -webkit-linear-gradient(
+            120deg,
+            #1f4fd8,
+            #4a6cf7
+    );
+}
+
+@keyframes heroFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px); /* biên độ nhỏ, không trôi */
+    }
+}
+.VPHero .image {
+    animation: heroFloat 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+
+.VPHero .VPImage {
+    position: relative;
+    width: 360px;
+    height: 360px;
+    padding: 28px;
+
+    border-radius: 50%;
+    z-index: 1;
+
+    /* shadow nhẹ, tập trung */
+    filter:
+            drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35))
+            drop-shadow(0 0 14px rgba(31, 79, 216, 0.35));
+    /*animation: floatY 6s ease-in-out infinite;*/
+}
+
+.VPHero .VPImage::before {
+    content: '';
+    position: absolute;
+    inset: -18%;
+    z-index: -1;
+
+    background: radial-gradient(
+            circle,
+            rgba(31, 79, 216, 0.25) 0%,
+            rgba(31, 79, 216, 0.12) 35%,
+            rgba(31, 79, 216, 0.04) 55%,
+            transparent 70%
+    );
+
+    border-radius: 50%;
+}
+
+@media (min-width: 640px) {
+    .VPHero .VPImage {
+        width: 400px;
+        height: 400px;
+    }
+}
+
+@media (min-width: 960px) {
+    .VPHero .VPImage {
+        width: 440px;
+        height: 440px;
+    }
+}
+
+.dark .VPHero .VPImage {
+    filter:
+            drop-shadow(0 16px 36px rgba(0, 0, 0, 0.5))
+            drop-shadow(0 0 18px rgba(74, 108, 247, 0.45));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .VPHero .VPImage > img {
+        animation: none;
+    }
+}

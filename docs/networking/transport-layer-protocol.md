@@ -14,7 +14,7 @@ outline: deep
 - Q3: Where is transport-layer protocol implemented?
 > At end systems
 - Q4: What is the mean of communication between application layer ↔ transport layer?
-> Via an **interface** named [**SOCKET**]()
+> Via an **interface** named [**SOCKET**](https://example.com)
 
 - Q5: How many protocols are there in the transport layer?
 > TCP and UDP

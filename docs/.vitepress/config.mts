@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Invariant Loop",
   description: "Invariant Loop Site",
   themeConfig: {
+    logo: '/invariantloop-logo.svg',
     search: {
       provider: 'local'
     },
