@@ -26,6 +26,10 @@ export default defineConfig({
           { text: '[1.3] Predicates and Quantifier', link: '/1_3-predicates-quantifier' },
           { text: '[1.4] Rule of inference', link: '/1_4-rule-of-inference' },
           { text: '[1.5] Proof', link: '/1_5-proof' },
+          { text: '[2.1] Set', link: '/2_1-set' },
+          { text: '[2.2] Set operation', link: '/2_2-set-operation' },
+          { text: '[2.3] Function', link: '/2_3-function' },
+          { text: '[2.4] Sequence', link: '/2_4-sequence' },
         ]
       },
       {
