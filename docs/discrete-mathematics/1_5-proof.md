@@ -78,13 +78,58 @@ Make use of the fact that the conditional statement $p \rightarrow q$ is equival
 
 ## Proof by contradiction  (Phản chứng)
 
-::: info
-- (1) Assume $¬p$ is true
-- (2) Then prove that $\neg p \rightarrow q \space is \space true$
-- (3) $q$ must be false, such as $q = r \wedge \neg r$
-- Because q is false (3) and (2) true, then $\neg p$ must be false
-- p is true
-:::
+### Ý tưởng cốt lõi
+Muốn chứng minh một mệnh đề là **đúng**, ta:
+- Giả sử **phủ định** của mệnh đề đó
+- Nếu giả sử này dẫn tới **mâu thuẫn (⊥)**  
+  ⇒ giả sử sai ⇒ mệnh đề ban đầu đúng
+
+---
+
+### Mâu thuẫn (Contradiction)
+Một mệnh đề **luôn sai**, dạng chuẩn:
+- r ∧ ¬r
+
+---
+
+### 1. Phản chứng để chứng minh mệnh đề p
+
+#### Schema
+1. Giả sử ¬p
+2. Từ ¬p suy ra mâu thuẫn ⊥
+3. ⇒ ¬p sai
+4. ⇒ p đúng
+
+#### Dạng logic
+¬p → ⊥  ⇒  p
+
+---
+
+### 2. Phản chứng để chứng minh mệnh đề điều kiện (p → q)
+
+#### Schema
+1. Giả sử p ∧ ¬q
+2. Từ đó suy ra mâu thuẫn ⊥
+3. ⇒ p ∧ ¬q sai
+4. ⇒ p → q đúng
+
+#### Dạng logic
+(p ∧ ¬q) → ⊥  ⇒  p → q
+
+---
+
+### Quan hệ với Contraposition
+- p → q ≡ ¬q → ¬p
+- Một proof by contraposition luôn có thể viết lại thành proof by contradiction
+- Proof by contradiction **tổng quát hơn**
+
+---
+
+### Ghi nhớ nhanh
+- Chứng minh p → giả sử ¬p
+- Chứng minh p → q → giả sử p ∧ ¬q
+- Mục tiêu: tạo mâu thuẫn
+
 
 ## Proofs of equivalence
 
