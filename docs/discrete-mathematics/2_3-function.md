@@ -101,13 +101,21 @@ $$
   **increasing** if $f (x) \leq f (y)$, and **strictly increasing** if $f (x) < f (y)$, whenever $x < y$ and x and y are in the domain of f. Hence
 
 $$
-\text{Increasing: } \forall x \forall y(x < y \rightarrow f (x) \leq f (y)) \\ \text{Strictly Increasing: } \forall x \forall y(x < y \rightarrow f (x) < f (y))
+\text{Increasing: } \forall x \forall y(x < y \rightarrow f (x) \leq f (y))
+$$
+
+$$
+\text{Strictly Increasing: } \forall x \forall y(x < y \rightarrow f (x) < f (y))
 $$
 
 - Similarly, for decreasing functions
 
 $$
-\text{Decreasing: } \forall x \forall y(x < y \rightarrow f (x) \geq f (y)) \\ \text{Strictly Decreasing: } \forall x \forall y(x < y \rightarrow f (x) > f (y))
+\text{Decreasing: } \forall x \forall y(x < y \rightarrow f (x) \geq f (y))
+$$
+
+$$
+\text{Strictly Decreasing: } \forall x \forall y(x < y \rightarrow f (x) > f (y))
 $$
 
 ::: tip

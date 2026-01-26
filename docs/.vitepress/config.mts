@@ -30,6 +30,9 @@ export default defineConfig({
           { text: '[2.2] Set operation', link: '/2_2-set-operation' },
           { text: '[2.3] Function', link: '/2_3-function' },
           { text: '[2.4] Sequence', link: '/2_4-sequence' },
+          { text: '[4.1] Divisibility and Modular', link: '/4_1-divisibility-and-modular-arithmetic' },
+          { text: '[4.2] Integer Representations and Algorithms', link: '/4_2-integer-representations-and-algorithms' },
+          { text: '[4.3] Primes and Greatest Common Divisors', link: '/4_3-primes-and-greatest-common-divisors' },
         ]
       },
       {

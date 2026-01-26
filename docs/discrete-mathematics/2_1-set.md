@@ -37,7 +37,7 @@ A = B \leftrightarrow \forall x(x \in A \leftrightarrow x \in B)
 $$
 
 ::: tip
-Showing Two Sets are Equal To show that two sets A and B are equal, show that $A ⊆ B$ and $B ⊆ A$
+To show that two sets A and B are equal, show that $A ⊆ B$ and $B ⊆ A$
 :::
 
 ## Empty set
