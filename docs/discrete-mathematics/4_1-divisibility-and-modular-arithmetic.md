@@ -57,11 +57,11 @@ Then there are **unique integers q and r**, with $0 ≤ r < d$, such that $a = d
 - We have notation for q and r:
 
 $$
-q = a \div d = \lfloor a/d \rfloor \text {, and }
+q = a \space div \space d = \lfloor a/d \rfloor \text {, and }
 $$
 
 $$
-r = a \space mod \space b = a - d
+r = a \space mod \space d = a - d
 $$
 
 ## Modular Arithmetic (số học đồng dư)

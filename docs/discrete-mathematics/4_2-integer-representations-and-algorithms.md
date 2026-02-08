@@ -187,3 +187,84 @@ $$
   - multiplies together those terms $b^{2^j} \space mod\space m$ where $a_j = 1$
 
 ![image.png](/images/discrete-mathematics/4_2-image5.png)
+
+## Cantor Expansion
+
+### Definition
+
+A **Cantor expansion** represents a non-negative integer as
+
+$$
+n = a_k k! + a_{k-1}(k-1)! + \cdots + a_2 2! + a_1 1!
+$$
+
+where
+
+$$
+0 \le a_i \le i \quad \text{for } i = 1,2,\dots,k
+$$
+
+This representation is also known as the **factorial number system**.
+
+---
+
+### Properties
+
+#### 1. Uniqueness
+Every non-negative integer has a **unique** Cantor expansion.
+
+#### 2. Mixed radix system
+Cantor expansion is **not** a fixed-base system.
+The radix at position $i$ is $(i+1)$.
+
+#### 3. Bounded digits
+Each coefficient has a strict bound:
+
+- $a_1 \in \{0,1\}$
+- $a_2 \in \{0,1,2\}$
+- $\dots$
+- $a_k \in \{0,1,\dots,k\}$
+
+---
+
+### Finding the Cantor Expansion
+
+#### Algorithm
+
+Given an integer $N$:
+
+1. Find the largest $k$ such that $k! \le N$
+2. Compute  
+   $$
+   a_k = \left\lfloor \frac{N}{k!} \right\rfloor
+   $$
+3. Update  
+   $$
+   N \leftarrow N - a_k k!
+   $$
+4. Repeat for $(k-1)! , (k-2)! , \dots , 1!$
+
+---
+
+### Example
+
+Find the Cantor expansion of $1000$.
+
+$$
+(1,2,1,2,2,0)
+$$
+
+---
+
+### Why Cantor Expansion Works
+
+Because
+
+$$
+1! + 2! + \cdots + k! < (k+1)!
+$$
+
+this guarantees:
+
+- No overlap between representations
+- Each sequence $(a_1,\dots,a_k)$ maps to a distinct integer
