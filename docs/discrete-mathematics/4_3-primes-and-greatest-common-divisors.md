@@ -22,7 +22,7 @@ If n is a composite integer, then n has a prime divisor less than or equal to $\
 
 - Proof:
   - From composite def, we have $n = a.b$ where b > 1
-  - Proof that $a \leq \sqrt n$ OR $b \leq \sqrt n$
+  - Prove that $a \leq \sqrt n$ OR $b \leq \sqrt n$
   - Assume, $a > \sqrt n$ AND $b > \sqrt n$, then $ab = \sqrt n \sqrt n = n > n$, contradict
 
 ::: tip 💡
@@ -38,7 +38,7 @@ There are inﬁnitely many primes
 ### Theorem 4 (The prime number theorem)
 
 ::: tip 💡
-The ratio of $𝜋(x)$, the number of primes not exceeding x, and $x∕ ln x$ approaches 1 as x grows without bound. (Here $ln x$ is the natural logarithm of x.)
+The ratio of $𝜋(x)$, the number of primes not exceeding x, and $x∕ ln x$ approaches 1 as x grows without a bound. (Here $ln x$ is the natural logarithm of x.)
 :::
 
 Mean that,
@@ -55,7 +55,7 @@ $$
 
 ## Greatest Common Divisors
 
-- Let a and b be integers, not both zero. The **largest integer d** such that  $d | a$ and $d ∣ b$ is called the greatest common divisor of a and b. The greatest common divisor of a and b is denoted by $gcd(a, b)$
+- Let a and b be integers, not both zero. The **largest integer d** such that $d | a$ and $d ∣ b$ is called the greatest common divisor of a and b. The greatest common divisor of a and b is denoted by $gcd(a, b)$
 
 $$
 gcd(a,b)=1 => \text{a and b are relatively prime}
@@ -75,7 +75,7 @@ $$
 
 ### Algorithm
 
-- Same as GCD but get $max(a_n,b_n)$
+- Same as GCD but get $max(a_n, b_n)$
   - $lcm(a, b) = p_1^{max(a_1,b_1)} \cdot p_2^{max(a_2,b_2)} ⋯ \cdot p_n^{max(a_n,b_n)}$
 
 ## The relationship between GCD and LCM
@@ -96,7 +96,7 @@ Let $a = bq + r,$ where a, b, q, and r are integers. Then $gcd(a, b) = gcd(b, r)
 
 ![image.png](/images/discrete-mathematics/4_3-image1.png)
 
-## gcds as Linear Combinations
+## Gcds as Linear Combinations
 
 ### BÉZOUT’S THEOREM
 
@@ -118,7 +118,7 @@ If a, b, and c are positive integers such that gcd(a, b) = 1 and a ∣ bc, then 
 LEMMA 3
 
 ::: info ✅
-If p is a prime and p ∣ a1 a2 ⋯ an , where each ai is an integer, then p ∣ ai for some i.
+If p is a prime and p ∣ a1 a2 ⋯ an, where each ai is an integer, then p ∣ ai for some i.
 :::
 
 THEOREM 7
@@ -130,3 +130,49 @@ If $ac ≡ bc(mod \space m)$ and $gcd(c, m) = 1$,
 
 ⇒ $a ≡ b (mod \space m)$.
 :::
+
+## Euler's Totient Function (φ Function)
+
+### Definition
+
+The **Euler totient function**, denoted by φ(n), is defined as:
+
+> The number of positive integers less than or equal to n that are relatively prime to n.
+
+Two integers are **relatively prime (coprime)** if their greatest common divisor is 1.
+
+---
+
+### Examples
+
+- φ(1) = 1
+- φ(6) = 2 → (1 and 5 are coprime with 6)
+- φ(8) = 4 → (1, 3, 5, 7 are coprime with 8)
+
+---
+
+### Important Formulas
+
+#### 1. Prime Case
+
+If p is prime:
+
+$$
+φ(p) = p − 1
+$$
+
+Every integer less than prime is coprime to it.
+
+---
+
+#### 2. Prime Power Case
+
+
+If
+$$
+n = p^k
+$$
+, then
+$$
+φ(p^k) = p^k − p^(k−1)
+$$
