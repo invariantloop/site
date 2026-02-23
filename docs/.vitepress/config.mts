@@ -33,6 +33,7 @@ export default defineConfig({
           { text: '[4.1] Divisibility and Modular', link: '/4_1-divisibility-and-modular-arithmetic' },
           { text: '[4.2] Integer Representations and Algorithms', link: '/4_2-integer-representations-and-algorithms' },
           { text: '[4.3] Primes and Greatest Common Divisors', link: '/4_3-primes-and-greatest-common-divisors' },
+          { text: '[4.4] Solving Congruences', link: '/4_4-solving-congruences' },
         ]
       },
       {
