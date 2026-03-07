@@ -176,3 +176,18 @@ $$
 $$
 φ(p^k) = p^k − p^(k−1)
 $$
+
+
+## Useful Properties
+
+:::info 1
+$$
+2^a - 1 \pmod{2^b - 1} = 2^{a \pmod{b}} - 1
+$$
+:::
+
+:::info 2
+$$
+gcd(2^a -1, 2^b -1) = 2^{gcd(a,b)} - 1
+$$
+:::
