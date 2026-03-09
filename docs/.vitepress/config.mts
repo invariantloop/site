@@ -34,6 +34,7 @@ export default defineConfig({
           { text: '[4.2] Integer Representations and Algorithms', link: '/4_2-integer-representations-and-algorithms' },
           { text: '[4.3] Primes and Greatest Common Divisors', link: '/4_3-primes-and-greatest-common-divisors' },
           { text: '[4.4] Solving Congruences', link: '/4_4-solving-congruences' },
+          { text: '[4.5] Cryptography', link: '/4_5-cryptography' },
         ]
       },
       {
