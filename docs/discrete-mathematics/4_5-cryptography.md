@@ -241,10 +241,124 @@ RSA encrypts **blocks of characters → blocks of numbers**, so it is a **block 
 
 
 ### The RSA Decryption
-### RSA as a Public Key System
+
+$$
+m \equiv c^d \pmod {pq}
+$$
+
 
 ## Cryptographic Protocols
 
-### Key exchange
+### Key exchange (Diffie–Hellman) 
+
+Diffie–Hellman là một a protocol that two parties can use to `exchange a secret key 
+over an insecure communications channel` without having shared any information in the
+past
+
+
+##### Public Parameters
+
+Alice and Bob publicly choose:
+
+- prime $p$
+- primitive root $a$ of $p$
+
+The computations are done in
+
+$$
+\mathbb{Z}_p
+$$
+
+
+#### Protocol Steps
+
+1. Alice chooses a secret
+
+$$
+k_1
+$$
+
+and sends
+
+$$
+a^{k_1} \bmod p
+$$
+
+to Bob.
+
+2. Bob chooses a secret
+
+$$
+k_2
+$$
+
+and sends
+
+$$
+a^{k_2} \bmod p
+$$
+
+to Alice.
+
+
+#### Compute Shared Key
+
+Alice and Bob compute the shared key
+
+$$
+(a^{k_2})^{k_1} \bmod p = (a^{k_1})^{k_2} \bmod p
+$$
+
 ### Digital signature
 
+Digital signatures allow a recipient to verify that a message **really came from the claimed sender**.
+
+:::tip They provide:
+- **Authentication** (who sent the message)
+- **Integrity** (message was not altered)
+:::
+
+#### Alice's RSA Keys
+
+Alice has:
+
+- Public key: $(n, e)$
+
+- Private key: $d$
+
+#### Signing a Message
+
+Alice wants to send a message \(M\).
+
+1. Convert the message into numbers.
+2. Split it into blocks:
+
+$$
+(m_1, m_2, ..., m_k)
+$$
+
+
+3. Alice signs each block using her **private key**:
+
+$$
+(s_i = m_i^d \pmod n)
+$$
+
+She sends the signature blocks:
+
+$$
+(s_1, s_2, ..., s_k)
+$$
+
+
+#### Verifying the Signature
+
+Anyone can verify the signature using **Alice's public key**.
+
+They compute:
+
+$$
+(m_i = s_i^e \pmod n)
+$$
+
+If the result equals the original message block, the signature is valid.
