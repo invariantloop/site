@@ -124,3 +124,33 @@ $$
 - Example:
     - How can we produce the terms of a sequence if the first 10 terms are $1, 3, 4, 7, 11, 18, 29, 47, 76, 123$ ?
     - ⇒ $a_n = a_{n-1} + a_{n-2}$ with initial conditions are $a_0 = 1$, $a_1 = 3$
+
+## Summations
+Let $a, b \in \mathbb{R}$ and let $x_1, x_2, \dots, x_n$ and $y_1, y_2, \dots, y_n$ be real numbers.
+
+### Linearity of Summation
+
+$$
+\sum_{j=1}^{n} (a x_j + b y_j)
+=
+a \sum_{j=1}^{n} x_j
++
+b \sum_{j=1}^{n} y_j
+$$
+
+### Sum of terms of a geometric progression
+
+If a and r are real numbers and r ≠ 0, then
+:::info Theorem 1
+$$
+\sum_{j=0}^{n} ar^j =
+\begin{cases}
+\frac{a(r^{n+1}-1)}{r-1}, & r \ne 1 \\
+(n+1)a, & r = 1
+\end{cases}
+$$
+:::
+
+
+### Some Useful Summation Formulae
+![image.png](/images/discrete-mathematics/2_4-image1.png)
