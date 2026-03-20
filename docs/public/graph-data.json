@@ -1,0 +1,35 @@
+{
+  "nodes": [
+    { "id": "logic",        "label": "Propositional Logic",      "group": "math",   "link": "/discrete-mathematics/1_1-propositional-logic",                    "desc": "Foundation of logical reasoning" },
+    { "id": "equiv",        "label": "Equivalences",             "group": "math",   "link": "/discrete-mathematics/1_2-propositional-equivalences",              "desc": "Logical equivalence laws" },
+    { "id": "pred",         "label": "Predicates & Quantifiers", "group": "math",   "link": "/discrete-mathematics/1_3-predicates-quantifier",                  "desc": "Predicate logic and quantifiers" },
+    { "id": "inference",    "label": "Rules of Inference",       "group": "math",   "link": "/discrete-mathematics/1_4-rule-of-inference",                      "desc": "Valid argument forms" },
+    { "id": "proof",        "label": "Proofs",                   "group": "math",   "link": "/discrete-mathematics/1_5-proof",                                  "desc": "Mathematical proof techniques" },
+    { "id": "sets",         "label": "Sets",                     "group": "math",   "link": "/discrete-mathematics/2_1-set",                                    "desc": "Set theory fundamentals" },
+    { "id": "setops",       "label": "Set Operations",           "group": "math",   "link": "/discrete-mathematics/2_2-set-operation",                          "desc": "Union, intersection, complement" },
+    { "id": "functions",    "label": "Functions",                "group": "math",   "link": "/discrete-mathematics/2_3-function",                               "desc": "Mathematical functions" },
+    { "id": "sequences",    "label": "Sequences & Summations",   "group": "math",   "link": "/discrete-mathematics/2_4-sequence",                               "desc": "Sequences and series" },
+    { "id": "divisibility", "label": "Divisibility & Modular",   "group": "number", "link": "/discrete-mathematics/4_1-divisibility-and-modular-arithmetic",    "desc": "Number theory foundations" },
+    { "id": "integers",     "label": "Integer Representations",  "group": "number", "link": "/discrete-mathematics/4_2-integer-representations-and-algorithms", "desc": "Binary, octal, hex" },
+    { "id": "primes",       "label": "Primes & GCD",             "group": "number", "link": "/discrete-mathematics/4_3-primes-and-greatest-common-divisors",    "desc": "Primes and Euclidean algorithm" },
+    { "id": "congruences",  "label": "Solving Congruences",      "group": "number", "link": "/discrete-mathematics/4_4-solving-congruences",                    "desc": "Chinese remainder theorem" },
+    { "id": "crypto",       "label": "Cryptography",             "group": "crypto", "link": "/discrete-mathematics/4_5-cryptography",                           "desc": "RSA and public-key cryptography" }
+  ],
+  "links": [
+    { "source": "logic",        "target": "equiv" },
+    { "source": "logic",        "target": "pred" },
+    { "source": "pred",         "target": "inference" },
+    { "source": "equiv",        "target": "proof" },
+    { "source": "inference",    "target": "proof" },
+    { "source": "sets",         "target": "setops" },
+    { "source": "sets",         "target": "functions" },
+    { "source": "sets",         "target": "sequences" },
+    { "source": "proof",        "target": "divisibility" },
+    { "source": "divisibility", "target": "integers" },
+    { "source": "divisibility", "target": "primes" },
+    { "source": "divisibility", "target": "congruences" },
+    { "source": "primes",       "target": "crypto" },
+    { "source": "congruences",  "target": "crypto" },
+    { "source": "logic",        "target": "sets" }
+  ]
+}

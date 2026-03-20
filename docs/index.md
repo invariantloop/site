@@ -3,10 +3,7 @@
 layout: home
 
 hero:
-  image:
-    src: /invariantloop-logo.svg
-    alt: logo
   name: "Invariant Loop"
-  text: "Coming soon"
+  tagline: "Where engineering begins"
 ---
 

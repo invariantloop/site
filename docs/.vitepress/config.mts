@@ -58,8 +58,8 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/invariantloop/site' }
     ],
     footer: {
-      message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2025 Invariant Loop'
+      message: 'Built with ❤️ and curiosity.',
+      copyright: `Copyright © ${new Date().getFullYear()} Invariant Loop`
     }
   },
   markdown: {

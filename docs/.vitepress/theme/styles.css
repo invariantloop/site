@@ -1,81 +1,249 @@
+/* ─── Hero gradient text ──────────────────────────────────────────────────── */
 :root {
-    --vp-home-hero-name-color: transparent;
-    --vp-home-hero-name-background: -webkit-linear-gradient(
-            120deg,
-            #1f4fd8,
-            #4a6cf7
-    );
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    #6d8eff 0%,
+    #a78bfa 50%,
+    #4a6cf7 100%
+  );
 }
 
+/* ─── Dark-mode design tokens ─────────────────────────────────────────────── */
+.dark {
+  /* backgrounds */
+  --vp-c-bg:        #05050f;
+  --vp-c-bg-alt:    #08081a;
+  --vp-c-bg-soft:   rgba(255, 255, 255, 0.04);
+  --vp-c-bg-mute:   rgba(255, 255, 255, 0.06);
+
+  /* brand */
+  --vp-c-brand-1:   #6d8eff;
+  --vp-c-brand-2:   #a78bfa;
+  --vp-c-brand-3:   rgba(109, 142, 255, 0.15);
+
+  /* text */
+  --vp-c-text-1:    rgba(255, 255, 255, 0.92);
+  --vp-c-text-2:    rgba(255, 255, 255, 0.60);
+  --vp-c-text-3:    rgba(255, 255, 255, 0.38);
+
+  /* borders / dividers */
+  --vp-c-divider:   rgba(255, 255, 255, 0.07);
+  --vp-c-border:    rgba(255, 255, 255, 0.10);
+
+  /* gutter */
+  --vp-nav-bg-color:     transparent;
+  --vp-sidebar-bg-color: transparent;
+}
+
+/* ─── Deep-space body background ─────────────────────────────────────────── */
+.dark body {
+  background: #05050f;
+}
+
+/* Radial color orbs that sit behind the glass layers */
+.dark body::before,
+.dark body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dark body::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 15%  20%, rgba(74,  108, 247, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 45% at 85%  75%, rgba(167, 139, 250, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 50%  50%, rgba( 30,  10,  60, 0.40) 0%, transparent 80%);
+}
+
+.dark body::after {
+  /* subtle noise texture via repeating gradient */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.6;
+}
+
+/* ─── Glass nav ──────────────────────────────────────────────────────────── */
+.dark .VPNav {
+  background: rgba(5, 5, 15, 0.55) !important;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ─── Glass sidebar ───────────────────────────────────────────────────────── */
+.dark .VPSidebar {
+  background: rgba(5, 5, 18, 0.60) !important;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* sidebar active item pill */
+.dark .VPSidebarItem.is-active > .item .link {
+  color: var(--vp-c-brand-1);
+  background: rgba(109, 142, 255, 0.10);
+  border-radius: 6px;
+}
+
+/* ─── Glass local nav (in-page TOC bar) ───────────────────────────────────── */
+.dark .VPLocalNav {
+  background: rgba(5, 5, 15, 0.55) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Glass content outline (right TOC) ──────────────────────────────────── */
+.dark .VPDocAside .content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ─── Glass code blocks ───────────────────────────────────────────────────── */
+.dark div[class*='language-'] {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dark div[class*='language-'] code {
+  background: transparent !important;
+}
+
+/* ─── Glass custom blocks (tip / warning / danger / info) ────────────────── */
+.dark .custom-block {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dark .custom-block.tip    { border-color: rgba(109, 142, 255, 0.30); }
+.dark .custom-block.warning{ border-color: rgba(255, 180,  50, 0.25); }
+.dark .custom-block.danger { border-color: rgba(255,  80,  80, 0.25); }
+
+/* ─── Glassmorphism home feature cards ───────────────────────────────────── */
+.dark .VPFeature {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.dark .VPFeature:hover {
+  border-color: rgba(109, 142, 255, 0.35) !important;
+  box-shadow: 0 0 32px rgba(109, 142, 255, 0.12);
+}
+
+/* ─── Hero section ────────────────────────────────────────────────────────── */
 @keyframes heroFloat {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-6px); /* biên độ nhỏ, không trôi */
-    }
-}
-.VPHero .image {
-    animation: heroFloat 6s ease-in-out infinite;
-    will-change: transform;
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
 }
 
+.VPHero .image {
+  animation: heroFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
 
 .VPHero .VPImage {
-    position: relative;
-    width: 360px;
-    height: 360px;
-    padding: 28px;
-
-    border-radius: 50%;
-    z-index: 1;
-
-    /* shadow nhẹ, tập trung */
-    filter:
-            drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35))
-            drop-shadow(0 0 14px rgba(31, 79, 216, 0.35));
-    /*animation: floatY 6s ease-in-out infinite;*/
+  position: relative;
+  width: 360px;
+  height: 360px;
+  padding: 28px;
+  border-radius: 50%;
+  z-index: 1;
+  filter:
+    drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 0 14px rgba(109, 142, 255, 0.35));
 }
 
 .VPHero .VPImage::before {
-    content: '';
-    position: absolute;
-    inset: -18%;
-    z-index: -1;
-
-    background: radial-gradient(
-            circle,
-            rgba(31, 79, 216, 0.25) 0%,
-            rgba(31, 79, 216, 0.12) 35%,
-            rgba(31, 79, 216, 0.04) 55%,
-            transparent 70%
-    );
-
-    border-radius: 50%;
+  content: '';
+  position: absolute;
+  inset: -18%;
+  z-index: -1;
+  background: radial-gradient(
+    circle,
+    rgba(109, 142, 255, 0.25) 0%,
+    rgba(109, 142, 255, 0.12) 35%,
+    rgba(109, 142, 255, 0.04) 55%,
+    transparent 70%
+  );
+  border-radius: 50%;
 }
 
 @media (min-width: 640px) {
-    .VPHero .VPImage {
-        width: 400px;
-        height: 400px;
-    }
+  .VPHero .VPImage { width: 400px; height: 400px; }
 }
-
 @media (min-width: 960px) {
-    .VPHero .VPImage {
-        width: 440px;
-        height: 440px;
-    }
+  .VPHero .VPImage { width: 440px; height: 440px; }
 }
 
 .dark .VPHero .VPImage {
-    filter:
-            drop-shadow(0 16px 36px rgba(0, 0, 0, 0.5))
-            drop-shadow(0 0 18px rgba(74, 108, 247, 0.45));
+  filter:
+    drop-shadow(0 16px 36px rgba(0, 0, 0, 0.50))
+    drop-shadow(0 0 24px rgba(109, 142, 255, 0.50));
 }
 
+/* ─── Glass hero action buttons ──────────────────────────────────────────── */
+.dark .VPButton.medium.brand {
+  background: rgba(109, 142, 255, 0.20);
+  border: 1px solid rgba(109, 142, 255, 0.45);
+  color: #a8c0ff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.dark .VPButton.medium.brand:hover {
+  background: rgba(109, 142, 255, 0.35);
+  box-shadow: 0 0 24px rgba(109, 142, 255, 0.25);
+}
+
+.dark .VPButton.medium.alt {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dark .VPButton.medium.alt:hover {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────────────── */
+.dark ::-webkit-scrollbar              { width: 6px; height: 6px; }
+.dark ::-webkit-scrollbar-track       { background: transparent; }
+.dark ::-webkit-scrollbar-thumb       { background: rgba(109, 142, 255, 0.30); border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb:hover { background: rgba(109, 142, 255, 0.55); }
+
+/* ─── Selection ───────────────────────────────────────────────────────────── */
+.dark ::selection {
+  background: rgba(109, 142, 255, 0.30);
+  color: #fff;
+}
+
+/* ─── Reduce motion ───────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-    .VPHero .VPImage > img {
-        animation: none;
-    }
+  .VPHero .image { animation: none; }
+}
+
+/* ─── Knowledge graph panel ───────────────────────────────────────────────── */
+.graph-full {
+  width: 100vw;
+  height: 80vh;
+  margin-left: calc(50% - 50vw);
 }

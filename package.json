@@ -8,5 +8,9 @@
   "devDependencies": {
     "markdown-it-mathjax3": "^4.3.2",
     "vitepress": "^2.0.0-alpha"
+  },
+  "dependencies": {
+    "d3-force": "^3.0.0",
+    "force-graph": "^1.51.2"
   }
 }
