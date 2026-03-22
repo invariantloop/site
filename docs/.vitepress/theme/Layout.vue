@@ -21,6 +21,6 @@ const { Layout } = DefaultTheme
   width: calc(100vw - 48px);
   max-width: 1200px;
   height: 75vh;
-  margin: 0 auto 0px;
+  margin: 0 auto 0;
 }
 </style>

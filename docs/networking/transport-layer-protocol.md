@@ -9,7 +9,7 @@ outline: deep
 - Q2: What is logical communication?
 > **Logical communication** means from an application’s perspective it is as if the hosts running the processes were directly connected but in reality, the hosts may be on opposite sides of the planet
 
-![image.png](../public/images/networking/tlp-image.png)
+![image.png](/images/networking/tlp-image.png)
 
 - Q3: Where is transport-layer protocol implemented?
 > At end systems
