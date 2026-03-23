@@ -52,7 +52,7 @@ export default defineConfig({
             ]
           },
           {
-            text: 'Chapter 4 — Number Theory & Cryptography',
+            text: 'Chapter 3 — Number Theory & Cryptography',
             collapsed: false,
             items: [
               { text: '1. Divisibility and Modular Arithmetic', link: '/4_1-divisibility-and-modular-arithmetic' },
@@ -60,6 +60,13 @@ export default defineConfig({
               { text: '3. Primes and Greatest Common Divisors', link: '/4_3-primes-and-greatest-common-divisors' },
               { text: '4. Solving Congruences', link: '/4_4-solving-congruences' },
               { text: '5. Cryptography', link: '/4_5-cryptography' },
+            ]
+          },
+          {
+            text: 'Chapter 4 — Mathematical Induction',
+            collapsed: false,
+            items: [
+              { text: '1. Induction', link: '/5_1-mathematical-induction' },
             ]
           },
         ]
