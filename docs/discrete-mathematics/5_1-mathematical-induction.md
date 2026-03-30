@@ -19,7 +19,44 @@ $$
 $$
 :::
  
-## Why Mathematical Induction is Valid (TBD)
+## Why Mathematical Induction is Valid
+We prove the validity of mathematical induction using the **well-ordering property** and **proof by contradiction**.
+
+### Well-Ordering Property
+Every nonempty subset of the positive integers has a least element.
+### Proof (by contradiction using well-ordering)
+Assume:
+- $P(1)$  is true
+- $P(k) \rightarrow P(k+1)$ holds for all $k \in \mathbb{Z}^+$
+
+Suppose, `for contradiction`, that there exists some $n$ such that $P(n)$ is false.
+
+Let:
+$$
+S = \{ n \in \mathbb{Z}^+ \mid P(n) \text{ is false} \}
+$$
+
+- Then $S \neq \emptyset$
+- By the well-ordering property, $S$ has a least element $m$
+
+
+### Deriving a contradiction
+
+- $m \neq 1$ (since $P(1)$ is true)
+- So $m > 1 \Rightarrow m - 1 \in \mathbb{Z}^+$
+- Because $m$ is the smallest counterexample:
+  $$
+  P(m - 1) \text{ is true}
+  $$
+
+- From the inductive step:
+  $$
+  P(m - 1) \rightarrow P(m)
+  \Rightarrow P(m) \text{ is true}
+  $$
+
+This contradicts the assumption that $P(m)$ is false.
+
 
 ## Template for Proofs by Mathematical Induction
 ::: tip Template
@@ -42,4 +79,14 @@ $$
 6. Clearly identify the conclusion of the inductive step, such as by saying `This completes the inductive step.`
 7. After completing the basis step and the inductive step, state the conclusion, namely, 
    `By mathematical induction, P(n) is true for all integers n with n ≥ b`
+:::
+
+## Strong induction
+- To prove that $P(n)$ is true for all positive integers n, where $P(n)$ is a propositional function,
+  we complete two steps
+::: info
+`BASIS STEP`: We verify that $P(1)$ is true.
+
+`INDUCTIVE STEP`: We show that the conditional statement $[P(1) \wedge P(2) \wedge P(3) \wedge...\wedge P(k)] → P(k + 1)$ is true for all
+positive integers k.
 :::
