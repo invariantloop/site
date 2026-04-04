@@ -67,6 +67,7 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: '1. Induction', link: '/5_1-mathematical-induction' },
+              { text: '2. Recursion', link: '/5_2-recursion' },
             ]
           },
         ]
