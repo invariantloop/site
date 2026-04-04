@@ -135,18 +135,36 @@ $$
 ## Structural Induction
 - Structural induction can be used to prove that all members of a set constructed recursively have a particular property.
 
+### Proof template on Strings (Σ*)
+
+::: info
+`BASIS STEP`: Show that $P(λ)$ is true.
+
+`RECURSIVE STEP`: Assume $P(w)$ is true. Show that for any $x ∈ Σ$, $P(wx)$ is also true.
+:::
+
+- Build string by adding characters at the end
+- If property holds for $w$ → must hold for $wx$
+
+### Proof template on Full Binary Trees
+
+::: tip
+`BASIS STEP`: Show that $P(T)$ is true for a **single-node** tree.
+
+`RECURSIVE STEP`: Assume $P(T_1)$ and $P(T_2)$ are true.  Show that $P(T_1 ⋅ T_2)$ is also true.
+:::
+
+- Tree is built by combining smaller trees
+- If property holds for subtrees → must hold for the combined tree
+
 ### Example on Well-Formed Formulae
 
 #### Goal
 Prove that every well-formed formula (WFF) has an equal number of left and right parentheses.
 
----
-
 #### Basis Step
 - T, F, and propositional variables (s) contain no parentheses
 - ⇒ number of left = number of right = 0 ✔️
-
----
 
 #### Recursive Step
 
@@ -154,8 +172,6 @@ Prove that every well-formed formula (WFF) has an equal number of left and right
 - p and q are WFF
 - p has equal left/right parentheses
 - q has equal left/right parentheses
-
----
 
 **Check new constructions:**
 
@@ -176,3 +192,11 @@ Prove that every well-formed formula (WFF) has an equal number of left and right
 - Property holds for basis
 - Preserved under recursive construction  
   ⇒ True for all WFF (by structural induction)
+
+## Comparison of Induction Methods
+
+| Type                       | Core Idea                           | When to Use                                           | Basis                                 | Induction Step                                            | "Build" Pattern           |
+|----------------------------|-------------------------------------|-------------------------------------------------------|---------------------------------------|-----------------------------------------------------------|---------------------------|
+| **Mathematical Induction** | Progress step-by-step over integers | Problems on ℕ (numbers)                               | Prove P(0) or P(1)                    | Assume P(n) → prove P(n+1)                                | n → n+1                   |
+| **Strong Induction**       | Use all previous cases              | When current case depends on multiple earlier ones    | Prove initial cases (P(0), P(1), ...) | Assume P(0)...P(n) → prove P(n+1)                         | depends on entire history |
+| **Structural Induction**   | Follow how objects are constructed  | Recursively defined structures (strings, trees, sets) | Prove for simplest object             | Assume true for components → prove for constructed object | build from smaller parts  |
