@@ -132,6 +132,21 @@ $$
 $$
 :::
 
+## Recursive Algorithms
+
+::: info Definition
+An algorithm is called `recursive` if it solves a problem by `reducing it to` an instance of the
+`same problem` with `smaller input`
+:::
+
+- Some examples of recursive algorithms:
+    - `Fibonacci` numbers
+    - `Power` $a^n$
+    - `Factorials` $n!$
+    - $gcd(a, b)$
+    - `Binary search` 
+- Proving recursive algorithms correctly requires a `strong induction` approach. 
+
 ## Structural Induction
 - Structural induction can be used to prove that all members of a set constructed recursively have a particular property.
 
@@ -200,3 +215,5 @@ Prove that every well-formed formula (WFF) has an equal number of left and right
 | **Mathematical Induction** | Progress step-by-step over integers | Problems on ℕ (numbers)                               | Prove P(0) or P(1)                    | Assume P(n) → prove P(n+1)                                | n → n+1                   |
 | **Strong Induction**       | Use all previous cases              | When current case depends on multiple earlier ones    | Prove initial cases (P(0), P(1), ...) | Assume P(0)...P(n) → prove P(n+1)                         | depends on entire history |
 | **Structural Induction**   | Follow how objects are constructed  | Recursively defined structures (strings, trees, sets) | Prove for simplest object             | Assume true for components → prove for constructed object | build from smaller parts  |
+
+
