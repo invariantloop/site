@@ -14,7 +14,7 @@
     { "id": "primes",       "label": "Primes & GCD",             "group": "number", "link": "/discrete-mathematics/4_3-primes-and-greatest-common-divisors",    "desc": "Primes and Euclidean algorithm" },
     { "id": "congruences",  "label": "Solving Congruences",      "group": "number", "link": "/discrete-mathematics/4_4-solving-congruences",                    "desc": "Chinese remainder theorem" },
     { "id": "crypto",       "label": "Cryptography",             "group": "crypto", "link": "/discrete-mathematics/4_5-cryptography",                           "desc": "RSA and public-key cryptography" },
-    { "id": "relations",       "label": "relations",             "group": "relations", "link": "/discrete-mathematics/9_1-relations",                           "desc": "Relations and its properties" }
+    { "id": "rel",          "label": "Relations",                "group": "rel",    "link": "/discrete-mathematics/9_1-relations",                              "desc": "Relations and its properties" }
   ],
   "links": [
     { "source": "logic",        "target": "equiv" },
@@ -32,7 +32,7 @@
     { "source": "primes",       "target": "crypto" },
     { "source": "congruences",  "target": "crypto" },
     { "source": "logic",        "target": "sets" },
-    { "source": "pred",        "target": "relations" },
-    { "source": "functions",        "target": "relations" }
+    { "source": "pred",        "target": "rel" },
+    { "source": "functions",        "target": "rel" }
   ]
 }

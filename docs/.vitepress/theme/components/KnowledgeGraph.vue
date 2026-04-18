@@ -12,6 +12,7 @@ const GROUP_META = {
   math:    { color: '#3b82f6', glow: '#93c5fd' },
   number:  { color: '#10b981', glow: '#6ee7b7' },
   crypto:  { color: '#8b5cf6', glow: '#c4b5fd' },
+  rel:     { color: '#f6b15c', glow: '#fdf7b5' },
 }
 
 // Tooltip state
