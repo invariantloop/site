@@ -71,6 +71,13 @@ export default defineConfig({
               { text: '3. Program correctness', link: '/5_3-program-correctness' },
             ]
           },
+          {
+            text: 'Chapter 5 — Relations',
+            collapsed: false,
+            items: [
+              { text: '1. Relations', link: '/9_1-relations' },
+            ]
+          },
         ]
       },
       {
