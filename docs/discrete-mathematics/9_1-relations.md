@@ -42,7 +42,7 @@ where the universe of discourse is the set of all elements in A.
 
 - Example:
   - Relation R on set $A = \{1, 2, 3, 4\}$
-  - $R = \{(1, 1), (1, 2), (1, 4), (2, 1), (2, 2), (3, 3), (4, 1), (4, 4)\}$ is relexive, but
+  - $R = \{(1, 1), (1, 2), (1, 4), (2, 1), (2, 2), (3, 3), (4, 1), (4, 4)\}$ is reflexive, but
   - $R = \{(1, 1), (1, 2), (1, 4)\}$ isn't relexive
 
 
@@ -136,4 +136,23 @@ $$
 ### Theorem 1
 ::: info
 The relation R on a set A is `transitive` if and only if $R^n \subseteq R$ for n = 1, 2, 3, ...
+:::
+
+## Inverse relation of R 
+::: info
+Let $R^{-1}$ be a reverse of relation $R$:
+
+$$
+R^{-1} = \{(b, a) | (a,b) \in R\}
+$$
+:::
+
+## Complementary relation of R 
+
+::: info
+Let $\overline{R}$ be a reverse of relation $R$:
+
+$$
+\overline{R} = \{(a, b) | (a, b) \notin R\}
+$$
 :::
