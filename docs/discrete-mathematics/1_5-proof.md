@@ -39,18 +39,18 @@ outline: deep
 ## Methods of Proving Theorems
 
 ::: tip
-:white_check_mark: Use axioms, definitions, previously proved results, and rules of inference to complete the proof
+Use axioms, definitions, previously proved results, and rules of inference to complete the proof
 :::
 
 ::: tip
-:white_check_mark: To prove a theorem of the form **$\forall x(P(x) \rightarrow Q(x))$,** should apply [**universal generalization**](1_4-rule-of-inference)
+To prove a theorem of the form **$\forall x(P(x) \rightarrow Q(x))$,** should apply [**universal generalization**](1_4-rule-of-inference)
 :::
 
 - That means, we need to prove $P(c) \rightarrow Q(c)$, for arbitrary c. In this case, we prove a conditional statement is true
 - Recall, $p \rightarrow q$ is true unless p is true but q is false
 
 ::: tip
-:white_check_mark: For $p \rightarrow q$ is true, we only need to prove **q is true if p is true**
+For $p \rightarrow q$ is true, we only need to prove **q is true if p is true**
 :::
 
 ## Direct Proofs
@@ -108,7 +108,7 @@ Một mệnh đề **luôn sai**, dạng chuẩn:
 ### 2. Phản chứng để chứng minh mệnh đề điều kiện (p → q)
 
 #### Schema
-1. Giả sử p ∧ ¬q
+1. Giả sử $p ∧ ¬q$ ( Use $¬(p \rightarrow q) \equiv ¬(¬p \vee q) \equiv (p \wedge ¬q)$)
 2. Từ đó suy ra mâu thuẫn ⊥
 3. ⇒ p ∧ ¬q sai
 4. ⇒ p → q đúng

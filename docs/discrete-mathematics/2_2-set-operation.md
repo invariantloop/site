@@ -47,6 +47,15 @@ $$
 
 ![image.png](/images/discrete-mathematics/2_2-image2.png)
 
+## Symmetric Difference
+- The symmetric difference of A and B, denoted by $A ⊕ B$, is the set containing those elements in either A or B, but not in both A and B
+ 
+$$
+A \oplus B  = (A \setminus B) \cup (B \setminus A) = (A \cup B) \setminus (A \cap B)
+$$
+
+![image.png](/images/discrete-mathematics/2_2-image8.png)
+
 ## Complement
 
 - Let U be the universal set. The complement of the set A, denoted by A,

@@ -77,3 +77,92 @@ Think of nested quantifiers like a 2 NESTED LOOP IN PROGRAMMING
 ## Negating nested quantifier
 
 - Apply De Morgan’s Laws for negating, just apply from **left → right** in propositions
+
+
+## Quantifiers: at least, at most, exactly
+
+### Setup
+Let P(x) be a predicate over a domain.
+
+---
+
+### 1. At least n
+
+#### Meaning
+There are **at least n distinct elements** satisfying P.
+
+#### Form (example n = 2)
+
+$$
+∃x ∃y (x ≠ y ∧ P(x) ∧ P(y))
+$$
+
+#### General pattern
+- Use n existential quantifiers (∃)
+- Add pairwise distinct conditions (≠)
+
+---
+
+### 2. At most n
+
+#### Meaning
+There are **no more than n elements** satisfying P.
+
+#### Form (example n = 1)
+
+$$
+∀x ∀y ((P(x) ∧ P(y)) → x = y)
+$$
+
+#### Form (example n = 2)
+
+$$
+∀x ∀y ∀z ((P(x) ∧ P(y) ∧ P(z)) → (x = y ∨ x = z ∨ y = z))
+$$
+
+#### General pattern
+- Use universal quantifiers (∀)
+- If n+1 elements satisfy P → at least two must be equal
+
+---
+
+### 3. Exactly n
+
+#### Meaning
+There are **exactly n elements** satisfying P.
+
+#### Form
+:::tip
+(at least n) $∧$ (at most n)
+:::
+
+---
+
+### Example: Exactly 2
+
+$$
+∃x ∃y (x ≠ y ∧ P(x) ∧ P(y))
+$$
+$$
+∧
+$$
+$$
+∀x ∀y ∀z ((P(x) ∧ P(y) ∧ P(z)) → (x = y ∨ x = z ∨ y = z))
+$$
+
+---
+
+### Special case: Exactly 1 (unique existence)
+
+$$
+∃x (P(x) ∧ ∀y (P(y) → y = x))
+$$
+
+---
+
+### Quick cheat sheet
+
+
+- at least n -> $∃ n$ distinct elements
+- at most n -> not exist $n+1$ distinct elements
+- exactly n -> (≥ n) $∧$ (≤ n)

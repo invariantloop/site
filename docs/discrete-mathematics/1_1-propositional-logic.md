@@ -34,6 +34,20 @@ outline: deep
 | p → q | Implication (hàm ý) | if p then q    | **False** when p is true and q is false, and true otherwise |
 | p ↔ q | Bi-conditional      | if and only if | Đúng nếu cả hai cùng giá trị                                |
 
+### Sufficient and necessary conditions
+:::info
+- A is `sufficient` for B: $A \rightarrow B$
+- A is `necessary` for B: $B \rightarrow A$
+:::
+- 4 forms of conditional statements
+
+| Case | Logic form | Meaning | Intuition |
+|------|-----------|--------|----------|
+| Necessary but NOT sufficient | (B → A) ∧ ¬(A → B) | B cần A, nhưng A chưa đủ cho B | Thiếu A → fail, có A chưa chắc đủ |
+| Sufficient but NOT necessary | (A → B) ∧ ¬(B → A) | A đủ cho B, nhưng B không cần A | Có A là ok, nhưng có cách khác |
+| Necessary AND sufficient | (A → B) ∧ (B → A) ⇔ A ↔ B | A và B tương đương | 2 cái giống nhau về logic |
+| Neither | ¬(A → B) ∧ ¬(B → A) | Không liên quan logic trực tiếp | Không kéo qua lại được |
+
 ![image.png](/images/discrete-mathematics/1_1-image.png)
 
 ![image.png](/images/discrete-mathematics/1_1-image1.png)

@@ -150,7 +150,7 @@ $$
 ## Complementary relation of R 
 
 ::: info
-Let $\overline{R}$ be a reverse of relation $R$:
+Let $\overline{R}$ be a complement of relation $R$:
 
 $$
 \overline{R} = \{(a, b) | (a, b) \notin R\}

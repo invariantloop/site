@@ -19,8 +19,23 @@ outline: deep
 
 ## Logical equivalences
 
-- The compound propositions p and q are called **logically equivalen**t if p ↔ q is a **tautology**.
+- The compound propositions p and q are called **logically equivalen**t if $p \equiv q$ is a **tautology**.
 - $p \equiv q$
+
+### Some different ways to express 2 propositions are equivalent
+
+:::tip $1^{st}$ way
+Use truth table
+:::
+
+:::tip $2^{nd}$ way
+Employ logical equivalences that we already know to transform p into q. See [Important logical equivalences](#important-logical-equivalences)
+:::
+
+:::tip $3^{rd}$ way
+Employ logical equivalence's definition. Specifically, prove that $p \equiv q$ is a tautology.
+:::
+
 
 ## Important logical equivalences
 
