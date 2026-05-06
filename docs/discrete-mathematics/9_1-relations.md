@@ -156,3 +156,63 @@ $$
 \overline{R} = \{(a, b) | (a, b) \notin R\}
 $$
 :::
+
+
+## Representing relations
+
+### Using Matrices
+- The relation $R$ can be represented by the matrix $M_R = [m_{ij}]$, where
+
+::: info
+$$
+m_{ij} =
+\begin{cases}
+1 & \text{if } (a_i, b_j) \in R \\
+0 & \text{if } (a_i, b_j) \notin R
+\end{cases}
+$$
+:::
+
+#### Relfexive relations
+- The relation $R$ is self-reflexive if $m_{ii} = 1$ for all $i \in R$.
+::: tip
+$$
+  \begin{bmatrix}
+  1 & & & \\
+  & 1 & & \\
+  & & ... & \\
+  & & & 1
+  \end{bmatrix}
+$$
+`Off diagonal elements can be 0 or 1`
+:::
+ 
+#### Symmetric relations
+- The relation $R$ is symmetric if $m_{ij} = m_{ji}$ for all $i,j \in R$.
+::: tip
+$$
+M_R = (M_R)^t
+$$
+:::
+
+![image.png](/images/discrete-mathematics/9_1-image1.png)
+
+#### Antisymmetric relations
+- The relation $R$ is antisymmetric if $m_{ij} = 0 \vee m_{ji} = 0$ when $i \neq j$.
+
+![image.png](/images/discrete-mathematics/9_1-image2.png)
+
+### Using Digraphs
+
+<Mermaid
+  code="
+graph LR
+A((A)) --> B((B))
+B --> A
+B --> C((C))
+C --> B
+A --> A
+B --> B
+C --> C
+"
+/>
