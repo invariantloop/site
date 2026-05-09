@@ -76,6 +76,7 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: '1. Relations', link: '/9_1-relations' },
+              { text: '2. Closures of Relations', link: '/9_4-closures-of-relations' },
             ]
           },
         ]
