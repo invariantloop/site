@@ -77,6 +77,7 @@ export default defineConfig({
             items: [
               { text: '1. Relations', link: '/9_1-relations' },
               { text: '2. Closures of Relations', link: '/9_4-closures-of-relations' },
+              { text: '3. Equivalence Relations', link: '/9_5-equivalence-relations' },
             ]
           },
         ]
