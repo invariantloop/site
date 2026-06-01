@@ -80,6 +80,14 @@ export default defineConfig({
               { text: '3. Equivalence Relations', link: '/9_5-equivalence-relations' },
             ]
           },
+          {
+            text: 'Chapter 6 — Counting',
+            collapsed: false,
+            items: [
+              { text: '1. The Basics of Counting', link: '/6_1-counting' },
+              { text: '2. The Pigeonhole Principle', link: '/6_2-pigeonhole-principle' },
+            ]
+          },
         ]
       },
       {
