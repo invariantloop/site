@@ -5,10 +5,10 @@ export default defineConfig({
   title: "Invariant Loop",
   description: "Invariant Loop Site",
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/invariantloop-logo.svg' }]
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]
   ],
   themeConfig: {
-    logo: '/invariantloop-logo.svg',
+    logo: '/logo.svg',
     search: {
       provider: 'local'
     },
