@@ -14,7 +14,10 @@
     { "id": "primes",       "label": "Primes & GCD",             "group": "number", "link": "/discrete-mathematics/4_3-primes-and-greatest-common-divisors",    "desc": "Primes and Euclidean algorithm" },
     { "id": "congruences",  "label": "Solving Congruences",      "group": "number", "link": "/discrete-mathematics/4_4-solving-congruences",                    "desc": "Chinese remainder theorem" },
     { "id": "crypto",       "label": "Cryptography",             "group": "crypto", "link": "/discrete-mathematics/4_5-cryptography",                           "desc": "RSA and public-key cryptography" },
-    { "id": "rel",          "label": "Relations",                "group": "rel",    "link": "/discrete-mathematics/9_1-relations",                              "desc": "Relations and its properties" }
+    { "id": "rel",          "label": "Relations",                "group": "rel",    "link": "/discrete-mathematics/9_1-relations",                              "desc": "Relations and its properties" },
+    { "id": "counting",     "label": "Basics of Counting",       "group": "count",  "link": "/discrete-mathematics/6_1-counting",                               "desc": "Product and sum rules" },
+    { "id": "pigeonhole",   "label": "Pigeonhole Principle",     "group": "count",  "link": "/discrete-mathematics/6_2-pigeonhole-principle",                    "desc": "More objects than boxes forces a collision" },
+    { "id": "permcomb",     "label": "Permutations & Combinations", "group": "count", "link": "/discrete-mathematics/6_3-permutations-and-combinations",          "desc": "Ordered vs. unordered selections; bijective and double-counting proofs" }
   ],
   "links": [
     { "source": "logic",        "target": "equiv" },
@@ -33,6 +36,11 @@
     { "source": "congruences",  "target": "crypto" },
     { "source": "logic",        "target": "sets" },
     { "source": "pred",        "target": "rel" },
-    { "source": "functions",        "target": "rel" }
+    { "source": "functions",        "target": "rel" },
+    { "source": "sets",         "target": "counting" },
+    { "source": "counting",     "target": "pigeonhole" },
+    { "source": "counting",     "target": "permcomb" },
+    { "source": "permcomb",     "target": "functions" },
+    { "source": "pigeonhole",   "target": "functions" }
   ]
 }
