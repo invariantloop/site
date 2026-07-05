@@ -86,6 +86,7 @@ export default defineConfig({
             items: [
               { text: '1. The Basics of Counting', link: '/6_1-counting' },
               { text: '2. The Pigeonhole Principle', link: '/6_2-pigeonhole-principle' },
+              { text: '3. Permutations and Combinations', link: '/6_3-permutations-and-combinations' },
             ]
           },
         ]
