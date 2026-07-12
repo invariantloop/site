@@ -92,6 +92,20 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Database',
+        base: '/database/',
+        collapsed: false,
+        items: [
+          {
+            text: 'Chapter 1 — Databases and Database Users',
+            collapsed: false,
+            items: [
+              { text: '1. Databases and Database Users', link: '/1_1-databases-and-database-users' },
+            ]
+          },
+        ]
+      },
+      {
         text: 'DSA',
         base: '/dsa/',
         collapsed: false,
