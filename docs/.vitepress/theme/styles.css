@@ -1,171 +1,213 @@
-/* ─── Hero gradient text ──────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Binance — trading-floor theme for VitePress
+   Bold Binance Yellow on monochrome dark surfaces. Up-green / down-red accents
+   borrowed from the order book. Clean sans, sentence case, soft 8px corners.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 :root {
+  /* Binance signature */
+  --bn-yellow:      #f0b90b;
+  --bn-yellow-lit:  #fcd535;
+  --bn-green:       #0ecb81;  /* buy / up */
+  --bn-red:         #f6465d;  /* sell / down */
+
+  /* hero name gradient */
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: -webkit-linear-gradient(
     120deg,
-    #6d8eff 0%,
-    #a78bfa 50%,
-    #4a6cf7 100%
+    #c99400 0%,
+    var(--bn-yellow) 100%
+  );
+
+  /* brand accent (light scheme uses a darker amber so links stay legible) */
+  --vp-c-brand-1: #b8860b;
+  --vp-c-brand-2: #9a7100;
+  --vp-c-brand-3: rgba(240, 185, 11, 0.14);
+}
+
+/* ─── Dark-mode design tokens (the intended, trading-terminal look) ────────── */
+.dark {
+  /* backgrounds — Binance monochrome dark */
+  --vp-c-bg:        #0b0e11;
+  --vp-c-bg-alt:    #06080a;
+  --vp-c-bg-soft:   #181a20;
+  --vp-c-bg-mute:   #1e2026;
+
+  /* brand */
+  --vp-c-brand-1:   var(--bn-yellow);
+  --vp-c-brand-2:   var(--bn-yellow-lit);
+  --vp-c-brand-3:   rgba(240, 185, 11, 0.16);
+
+  /* text — Binance uses cool greys */
+  --vp-c-text-1:    #eaecef;
+  --vp-c-text-2:    #848e9c;
+  --vp-c-text-3:    #5e6673;
+
+  /* borders / dividers */
+  --vp-c-divider:   #2b3139;
+  --vp-c-border:    #2b3139;
+
+  /* gutter */
+  --vp-nav-bg-color:     rgba(11, 14, 17, 0.85);
+  --vp-sidebar-bg-color: #0b0e11;
+
+  /* hero name — bright yellow on dark */
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    var(--bn-yellow) 0%,
+    var(--bn-yellow-lit) 100%
   );
 }
 
-/* ─── Dark-mode design tokens ─────────────────────────────────────────────── */
-.dark {
-  /* backgrounds */
-  --vp-c-bg:        #05050f;
-  --vp-c-bg-alt:    #08081a;
-  --vp-c-bg-soft:   rgba(255, 255, 255, 0.04);
-  --vp-c-bg-mute:   rgba(255, 255, 255, 0.06);
-
-  /* brand */
-  --vp-c-brand-1:   #6d8eff;
-  --vp-c-brand-2:   #a78bfa;
-  --vp-c-brand-3:   rgba(109, 142, 255, 0.15);
-
-  /* text */
-  --vp-c-text-1:    rgba(255, 255, 255, 0.92);
-  --vp-c-text-2:    rgba(255, 255, 255, 0.60);
-  --vp-c-text-3:    rgba(255, 255, 255, 0.38);
-
-  /* borders / dividers */
-  --vp-c-divider:   rgba(255, 255, 255, 0.07);
-  --vp-c-border:    rgba(255, 255, 255, 0.10);
-
-  /* gutter */
-  --vp-nav-bg-color:     transparent;
-  --vp-sidebar-bg-color: transparent;
-}
-
-/* ─── Deep-space body background ─────────────────────────────────────────── */
+/* ─── Monochrome body background ──────────────────────────────────────────── */
 .dark body {
-  background: #05050f;
+  background: #0b0e11;
 }
 
-/* Radial color orbs that sit behind the glass layers */
-.dark body::before,
-.dark body::after {
+/* One restrained atmospheric layer: a faint yellow trading-floor glow, top-right */
+.dark body::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-}
-
-.dark body::before {
   background:
-    radial-gradient(ellipse 60% 50% at 15%  20%, rgba(74,  108, 247, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 45% at 85%  75%, rgba(167, 139, 250, 0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 50%  50%, rgba( 30,  10,  60, 0.40) 0%, transparent 80%);
+    radial-gradient(ellipse 50% 45% at 100% 0%, rgba(240, 185, 11, 0.08) 0%, transparent 70%);
 }
 
-.dark body::after {
-  /* subtle noise texture via repeating gradient */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-  opacity: 0.6;
+/* ─── Headings — clean, sentence case, bold ───────────────────────────────── */
+.vp-doc h1,
+.vp-doc h2 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-/* ─── Glass nav ──────────────────────────────────────────────────────────── */
+/* H2 gets a short Binance-yellow underline tab — the signature marker */
+.vp-doc h2 {
+  padding-bottom: 10px;
+  border-top: none;
+  border-bottom: 1px solid var(--vp-c-divider);
+  position: relative;
+  margin-top: 40px;
+}
+.vp-doc h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 48px;
+  height: 3px;
+  background: var(--bn-yellow);
+}
+
+/* ─── Nav — flat monochrome bar, hairline yellow top edge ─────────────────── */
 .dark .VPNav {
-  background: rgba(5, 5, 15, 0.55) !important;
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-/* ─── Glass sidebar ───────────────────────────────────────────────────────── */
-.dark .VPSidebar {
-  background: rgba(5, 5, 18, 0.60) !important;
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* sidebar active item pill */
-.dark .VPSidebarItem.is-active > .item .link {
-  color: var(--vp-c-brand-1);
-  background: rgba(109, 142, 255, 0.10);
-  border-radius: 6px;
-}
-
-/* ─── Glass local nav (in-page TOC bar) ───────────────────────────────────── */
-.dark .VPLocalNav {
-  background: rgba(5, 5, 15, 0.55) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* ─── Glass content outline (right TOC) ──────────────────────────────────── */
-.dark .VPDocAside .content {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
-  padding: 12px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-/* ─── Glass code blocks ───────────────────────────────────────────────────── */
-.dark div[class*='language-'] {
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  background: rgba(11, 14, 17, 0.85) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--vp-c-divider);
+  position: relative;
+}
+.dark .VPNav::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--bn-yellow);
 }
 
+/* ─── Sidebar — flat ──────────────────────────────────────────────────────── */
+.dark .VPSidebar {
+  background: #0b0e11 !important;
+  border-right: 1px solid var(--vp-c-divider);
+}
+
+/* active item: yellow label + yellow left marker */
+.dark .VPSidebarItem.is-active > .item .link .text {
+  color: var(--bn-yellow);
+  font-weight: 600;
+}
+.dark .VPSidebarItem.is-active > .item {
+  position: relative;
+}
+.dark .VPSidebarItem.is-active > .item::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 3px;
+  bottom: 3px;
+  width: 3px;
+  background: var(--bn-yellow);
+}
+
+/* ─── Local nav (in-page TOC bar) ─────────────────────────────────────────── */
+.dark .VPLocalNav {
+  background: rgba(11, 14, 17, 0.85) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+/* ─── Content outline (right TOC) — flat panel, yellow rail ───────────────── */
+.dark .VPDocAside .content {
+  background: #181a20;
+  border: 1px solid var(--vp-c-divider);
+  border-left: 2px solid var(--bn-yellow);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+/* ─── Code blocks — monochrome surface, soft corners ──────────────────────── */
+.dark div[class*='language-'] {
+  background: #181a20 !important;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+}
 .dark div[class*='language-'] code {
   background: transparent !important;
 }
 
-/* ─── Glass custom blocks (tip / warning / danger / info) ────────────────── */
+/* ─── Custom blocks — order-book accent bars ──────────────────────────────── */
 .dark .custom-block {
-  border-radius: 10px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
   border-left-width: 3px;
   border-left-style: solid;
+  background: #181a20;
 }
-
-.dark .custom-block.tip {
-  background: rgba(72, 199, 142, 0.08);
-  border-color: rgba(72, 199, 142, 0.50);
-}
-
-.dark .custom-block.info {
-  background: rgba(150, 180, 220, 0.07);
-  border-color: rgba(150, 180, 220, 0.40);
-}
-
-.dark .custom-block.warning {
-  background: rgba(255, 180, 50, 0.08);
-  border-color: rgba(255, 180, 50, 0.50);
-}
-
-.dark .custom-block.danger {
-  background: rgba(255, 80, 80, 0.08);
-  border-color: rgba(255, 80, 80, 0.50);
-}
-
+.dark .custom-block.tip     { border-color: var(--bn-green); }
+.dark .custom-block.info    { border-color: #848e9c; }
+.dark .custom-block.warning { border-color: var(--bn-yellow); }
+.dark .custom-block.danger  { border-color: var(--bn-red); }
 .dark .custom-block.details {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: #1e2026;
+  border-color: var(--vp-c-divider);
 }
 
-/* ─── Glassmorphism home feature cards ───────────────────────────────────── */
+/* ─── Home feature cards — monochrome, yellow on hover ─────────────────────── */
 .dark .VPFeature {
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 16px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: border-color 0.25s, box-shadow 0.25s;
+  background: #181a20 !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
 }
-
+.dark .VPFeature::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: var(--bn-yellow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
 .dark .VPFeature:hover {
-  border-color: rgba(109, 142, 255, 0.35) !important;
-  box-shadow: 0 0 32px rgba(109, 142, 255, 0.12);
+  border-color: rgba(240, 185, 11, 0.5) !important;
+  transform: translateY(-2px);
+}
+.dark .VPFeature:hover::after {
+  transform: scaleX(1);
 }
 
 /* ─── Hero section ────────────────────────────────────────────────────────── */
@@ -187,8 +229,8 @@
   border-radius: 50%;
   z-index: 1;
   filter:
-    drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35))
-    drop-shadow(0 0 14px rgba(109, 142, 255, 0.35));
+    drop-shadow(0 12px 28px rgba(0, 0, 0, 0.45))
+    drop-shadow(0 0 14px rgba(240, 185, 11, 0.30));
 }
 
 .VPHero .VPImage::before {
@@ -198,9 +240,8 @@
   z-index: -1;
   background: radial-gradient(
     circle,
-    rgba(109, 142, 255, 0.25) 0%,
-    rgba(109, 142, 255, 0.12) 35%,
-    rgba(109, 142, 255, 0.04) 55%,
+    rgba(240, 185, 11, 0.22) 0%,
+    rgba(240, 185, 11, 0.10) 40%,
     transparent 70%
   );
   border-radius: 50%;
@@ -215,51 +256,56 @@
 
 .dark .VPHero .VPImage {
   filter:
-    drop-shadow(0 16px 36px rgba(0, 0, 0, 0.50))
-    drop-shadow(0 0 24px rgba(109, 142, 255, 0.50));
+    drop-shadow(0 16px 36px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 24px rgba(240, 185, 11, 0.45));
 }
 
-/* ─── Glass hero action buttons ──────────────────────────────────────────── */
+/* ─── Hero action buttons — Binance yellow primary, black label ───────────── */
+.dark .VPButton {
+  border-radius: 8px;
+  font-weight: 600;
+}
 .dark .VPButton.medium.brand {
-  background: rgba(109, 142, 255, 0.20);
-  border: 1px solid rgba(109, 142, 255, 0.45);
-  color: #a8c0ff;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--bn-yellow);
+  border: 1px solid var(--bn-yellow);
+  color: #0b0e11;
   transition: background 0.2s, box-shadow 0.2s;
 }
-
 .dark .VPButton.medium.brand:hover {
-  background: rgba(109, 142, 255, 0.35);
-  box-shadow: 0 0 24px rgba(109, 142, 255, 0.25);
+  background: var(--bn-yellow-lit);
+  box-shadow: 0 0 20px rgba(240, 185, 11, 0.30);
 }
-
 .dark .VPButton.medium.alt {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: #1e2026;
+  border: 1px solid var(--vp-c-divider);
+  color: #eaecef;
+}
+.dark .VPButton.medium.alt:hover {
+  border-color: var(--bn-yellow);
+  color: var(--bn-yellow);
 }
 
-.dark .VPButton.medium.alt:hover {
-  background: rgba(255, 255, 255, 0.10);
+/* ─── Inline code / links keep the yellow ─────────────────────────────────── */
+.dark .vp-doc a {
+  text-decoration-color: rgba(240, 185, 11, 0.4);
 }
 
 /* ─── Scrollbar ───────────────────────────────────────────────────────────── */
 .dark ::-webkit-scrollbar              { width: 6px; height: 6px; }
-.dark ::-webkit-scrollbar-track       { background: transparent; }
-.dark ::-webkit-scrollbar-thumb       { background: rgba(109, 142, 255, 0.30); border-radius: 3px; }
-.dark ::-webkit-scrollbar-thumb:hover { background: rgba(109, 142, 255, 0.55); }
+.dark ::-webkit-scrollbar-track        { background: transparent; }
+.dark ::-webkit-scrollbar-thumb        { background: rgba(240, 185, 11, 0.35); border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb:hover  { background: var(--bn-yellow); }
 
 /* ─── Selection ───────────────────────────────────────────────────────────── */
 .dark ::selection {
-  background: rgba(109, 142, 255, 0.30);
+  background: rgba(240, 185, 11, 0.30);
   color: #fff;
 }
 
 /* ─── Reduce motion ───────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .VPHero .image { animation: none; }
+  .dark .VPFeature:hover { transform: none; }
 }
 
 /* ─── Knowledge graph panel ───────────────────────────────────────────────── */
