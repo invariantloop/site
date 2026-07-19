@@ -41,7 +41,7 @@ export default defineConfig({
         items: [
           {
             text: 'Chapter 1 — Logic & Proofs',
-            collapsed: false,
+            collapsed: true,
             items: [
               { text: '1. Propositional Logic', link: '/1_1-propositional-logic' },
               { text: '2. Propositional Equivalences', link: '/1_2-propositional-equivalences' },
@@ -52,7 +52,7 @@ export default defineConfig({
           },
           {
             text: 'Chapter 2 — Sets & Functions',
-            collapsed: false,
+            collapsed: true,
             items: [
               { text: '1. Set', link: '/2_1-set' },
               { text: '2. Set Operations', link: '/2_2-set-operation' },
@@ -62,7 +62,7 @@ export default defineConfig({
           },
           {
             text: 'Chapter 3 — Number Theory & Cryptography',
-            collapsed: false,
+            collapsed: true,
             items: [
               { text: '1. Divisibility and Modular Arithmetic', link: '/4_1-divisibility-and-modular-arithmetic' },
               { text: '2. Integer Representations and Algorithms', link: '/4_2-integer-representations-and-algorithms' },
@@ -73,7 +73,7 @@ export default defineConfig({
           },
           {
             text: 'Chapter 4 — Mathematical Induction',
-            collapsed: false,
+            collapsed: true,
             items: [
               { text: '1. Induction', link: '/5_1-mathematical-induction' },
               { text: '2. Recursion', link: '/5_2-recursion' },
@@ -82,7 +82,7 @@ export default defineConfig({
           },
           {
             text: 'Chapter 5 — Relations',
-            collapsed: false,
+            collapsed: true,
             items: [
               { text: '1. Relations', link: '/9_1-relations' },
               { text: '2. Closures of Relations', link: '/9_4-closures-of-relations' },
@@ -91,7 +91,7 @@ export default defineConfig({
           },
           {
             text: 'Chapter 6 — Counting',
-            collapsed: false,
+            collapsed: true,
             items: [
               { text: '1. The Basics of Counting', link: '/6_1-counting' },
               { text: '2. The Pigeonhole Principle', link: '/6_2-pigeonhole-principle' },
@@ -107,9 +107,16 @@ export default defineConfig({
         items: [
           {
             text: 'Chapter 1 — Databases and Database Users',
-            collapsed: false,
+            collapsed: true,
             items: [
               { text: '1. Databases and Database Users', link: '/1_1-databases-and-database-users' },
+            ]
+          },
+          {
+            text: 'Chapter 2 — Database System Concepts and Architecture',
+            collapsed: true,
+            items: [
+              { text: '1. Database System Concepts and Architecture', link: '/2_1-database-system-concepts-and-architecture' },
             ]
           },
         ]
