@@ -119,6 +119,13 @@ export default defineConfig({
               { text: '1. Database System Concepts and Architecture', link: '/2_1-database-system-concepts-and-architecture' },
             ]
           },
+          {
+            text: 'Chapter 3 — Disk Storage, Basic File Structures, Hashing, and Modern Storage Architectures',
+            collapsed: true,
+            items: [
+              { text: '1. Disk Storage, Secondary Storage & Buffering', link: '/16_1-disk-storage-file-structures' },
+            ]
+          },
         ]
       },
       {
