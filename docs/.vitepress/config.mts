@@ -124,6 +124,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: '1. Disk Storage, Secondary Storage & Buffering', link: '/16_1-disk-storage-file-structures' },
+              { text: '2. Records, Blocking & File Operations', link: '/16_2-records-blocking-and-file-operations' },
+              { text: '3. Heap Files & Sorted Files', link: '/16_3-heap-and-sorted-files' },
             ]
           },
         ]
