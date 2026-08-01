@@ -290,6 +290,23 @@
   text-decoration-color: rgba(240, 185, 11, 0.4);
 }
 
+/* ─── <mark> — yellow bold text, no highlighter background ─────────────────── */
+.vp-doc mark {
+  background: none;
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+
+.dark .vp-doc mark {
+  color: var(--bn-yellow);
+}
+
+/* keep nested bold from doubling up into a heavier weight */
+.vp-doc mark strong {
+  color: inherit;
+  font-weight: inherit;
+}
+
 /* ─── Scrollbar ───────────────────────────────────────────────────────────── */
 .dark ::-webkit-scrollbar              { width: 6px; height: 6px; }
 .dark ::-webkit-scrollbar-track        { background: transparent; }
