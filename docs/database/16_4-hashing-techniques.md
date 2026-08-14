@@ -155,6 +155,8 @@ The directory must be maintained, and it doubles in size the moment a *single* b
 
 <mark>**Dynamic hashing**</mark> is the same splitting idea with the flat directory replaced by a <mark>**binary trie**</mark>: internal nodes have a `0` child and a `1` child, and the leaves point to buckets. Searching means walking down the tree consuming one bit of $h(K)$ per level.
 
+![Dynamic hashing: a binary trie directory whose internal nodes branch on 0/1 and whose leaf nodes point to data file buckets, one bucket per hash-value prefix such as 000, 001, 01, 10, 110, 111](/images/database/16_4-image2.png)
+
 Splitting a bucket simply turns its leaf into an internal node with two new leaves — a purely **local** change. There is no doubling step, so a skewed distribution grows only the branches it actually uses rather than the whole directory.
 
 The trade-off is that traversing a tree costs more than indexing an array, and the tree itself needs pointer space and maintenance. In practice extendible and linear hashing are the ones that get implemented.
@@ -163,12 +165,16 @@ The trade-off is that traversing a tree costs more than indexing an array, and t
 
 <mark>**Linear hashing**</mark> is the most elegant of the three: it allows the file to grow and shrink **with no directory at all**.
 
+Extendible and dynamic hashing both need a structure — an array, a trie — whose job is to remember *which* buckets have already been split. Linear hashing removes the need for one by giving up the freedom to choose: buckets are split in a fixed order, $0, 1, 2, \dots$, so a single counter is enough to know the answer.
+
+**Setup**
+
 The file starts with $M$ buckets, numbered $0 \dots M-1$, using $h_0(K) = K \bmod M$. Two extra pieces of state are kept:
 
 - $n$ — the <mark>**split pointer**</mark>, the number of the next bucket to be split. It starts at $0$.
 - a second hash function $h_1(K) = K \bmod 2M$.
 
-The search rule is:
+**The search rule**
 
 $$
 \text{bucket} =
@@ -178,17 +184,71 @@ h_1(K), & \text{if } h_0(K) < n \quad(\text{already split})
 \end{cases}
 $$
 
-**The counter-intuitive part:** when a bucket overflows, the bucket that gets split is **not** the one that overflowed — it is bucket $n$, whatever that happens to be. The overflowing bucket uses an overflow chain in the meantime; it will be split in its turn as $n$ sweeps past it.
+Read it as a single question: *has my bucket been split yet?* Buckets $0 \dots n-1$ have been, buckets $n \dots M-1$ have not — and that is exactly what the test $h_0(K) < n$ decides. If the bucket has not been split, $h_0$ still points at the right place; if it has, the records were redistributed by the finer function, so $h_1$ must be used.
 
-Each split appends a **new bucket at the end of the file** (bucket $M + n$), redistributes the records of bucket $n$ between $n$ and $M + n$ using $h_1$, then increments $n$. When $n$ reaches $M$, a full round is complete: every bucket has been split, the file has $2M$ buckets, so $n$ resets to $0$, $M$ doubles, and the hash functions shift up one level ($h_1$ becomes the new $h_0$).
+:::info Why a record can never end up lost
+Because $2M$ is a multiple of $M$, the value $K \bmod 2M$ can only be one of **two** things:
 
-![Linear hashing: the split pointer n sweeping across the buckets, with buckets before n already split into pairs at the end of the file and an overflow chain on a bucket that has not yet been reached](/images/database/16_4-image2.png)
+$$
+h_1(K) \in \{\, h_0(K),\; h_0(K) + M \,\}
+$$
 
-:::info When to trigger a split
-Splitting on *any* overflow gives a load factor of roughly 60% — a lot of wasted space. Implementations instead trigger a split when the **load factor** crosses a chosen threshold, keeping $\alpha$ near 0.9 in exchange for slightly longer overflow chains.
+So splitting bucket $j$ can send each of its records to just two destinations: it stays in $j$, or it moves to $j + M$. A record never migrates to an unrelated bucket, which is why a *partially* split file is still searchable with one counter — no per-bucket bookkeeping is required.
 :::
 
-Contraction is the mirror image: when the load factor falls below a lower threshold, decrement $n$, merge bucket $M + n$ back into bucket $n$, and remove the last bucket from the file.
+**Splitting**
+
+**The counter-intuitive part:** when a bucket overflows, the bucket that gets split is **not** the one that overflowed — it is bucket $n$, whatever that happens to be. The overflowing bucket uses an overflow chain in the meantime; it will be split in its turn as $n$ sweeps past it, and the chain is absorbed at that moment.
+
+Each split:
+
+1. Appends a **new bucket at the end of the file**, which is bucket $M + n$.
+2. Redistributes the records of bucket $n$ — including its overflow chain — between $n$ and $M + n$ using $h_1$.
+3. Increments $n$.
+
+**A worked trace**
+
+Take $M = 4$ and $\texttt{bfr} = 2$ records per bucket, starting from $n = 0$:
+
+$$
+b_0 = \{4, 8\} \quad b_1 = \{9, 13\} \quad b_2 = \{6\} \quad b_3 = \{15\}
+$$
+
+- **Insert 17.** $h_0(17) = 1$, and $1 \ge n = 0$, so it belongs in $b_1$ — which is full, so 17 goes to $b_1$'s overflow chain. The overflow triggers a split of bucket **$n = 0$**, not bucket 1. Bucket 0's records go through $h_1 = K \bmod 8$: $8 \mapsto 0$, $4 \mapsto 4$. Result: $b_0 = \{8\}$, new $b_4 = \{4\}$, and $n = 1$.
+- **Insert 21.** $h_0(21) = 1$, and $1 \ge n = 1$, so $b_1$ again — still full, so 21 joins the chain. This time the split *does* land on bucket 1, because $n = 1$. Its four records $\{9, 13\}$ plus the chain $\{17, 21\}$ are redistributed by $h_1$: $9 \mapsto 1$, $17 \mapsto 1$, $13 \mapsto 5$, $21 \mapsto 5$. Result: $b_1 = \{9, 17\}$, new $b_5 = \{13, 21\}$, the chain is gone, and $n = 2$.
+
+Searching now, with $n = 2$: for key 13, $h_0(13) = 1 < 2$, so use $h_1(13) = 5$ — bucket 5, correct. For key 15, $h_0(15) = 3 \ge 2$, so bucket 3 — also correct, even though bucket 3 has never been touched.
+
+**Completing a round**
+
+When $n$ reaches $M$, every original bucket has been split and the file holds $2M$ buckets. A <mark>**round**</mark> is complete: $n$ resets to $0$, $M$ doubles, and the hash functions shift up one level — $h_1$ becomes the new $h_0$ and a new, finer $h_1$ takes its place. In general, with $M_0$ the original number of buckets, round $i$ uses
+
+$$
+h_i(K) = K \bmod (2^i M_0)
+$$
+
+so the file doubles once per round while the search rule above never changes.
+
+**Controlling splits with the load factor**
+
+Splitting on *every* overflow works, but it keeps the file only about **60%** full — a lot of wasted space. Implementations therefore drive splitting from the <mark>**file load factor**</mark> instead:
+
+$$
+l = \frac{r}{\texttt{bfr} \times N}
+$$
+
+where $r$ is the current number of records, $\texttt{bfr}$ the maximum number of records per bucket, and $N$ the current number of buckets. A split is triggered when $l$ rises above an upper threshold — typically **0.9** — regardless of whether anything overflowed, which buys much better space utilization at the cost of slightly longer overflow chains on the buckets ahead of $n$.
+
+**Contraction**
+
+Contraction is the mirror image, and it is what keeps the load factor from collapsing when records are deleted. When $l$ falls below a lower threshold — typically **0.7** — buckets are recombined, also **linearly**: decrement $n$, merge the last bucket $M + n$ back into bucket $n$, and remove it from the file, decrementing $N$. With the two thresholds working together, the file load is held inside the desired band as the file grows and shrinks.
+
+:::tip Why linear hashing wins in practice
+- It keeps the load factor **fairly constant** while the file grows *and* shrinks, because splits and merges are both driven by the same measurement.
+- It needs **no directory** — just the counter $n$ and the current $M$ — so there is nothing to double, nothing to traverse, and nothing extra to keep in memory.
+
+The price is that the bucket being split is chosen by position, not by need: a bucket may be split while nearly empty, and an overloaded bucket must wait behind an overflow chain until $n$ reaches it.
+:::
 
 ## Comparison and When to Use Hashing
 
