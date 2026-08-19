@@ -130,6 +130,17 @@ export default defineConfig({
               { text: '5. Other File Organizations & RAID', link: '/16_5-other-file-organizations-and-raid' },
             ]
           },
+          {
+            text: 'Chapter 4 — Indexing Structures for Files and Physical Database Design',
+            collapsed: true,
+            items: [
+              { text: '1. Single-Level Ordered Indexes', link: '/17_1-single-level-ordered-indexes' },
+              { text: '2. Multilevel Indexes & Search Trees', link: '/17_2-multilevel-indexes' },
+              { text: '3. B-Trees & B⁺-Trees', link: '/17_3-b-trees-and-b-plus-trees' },
+              { text: '4. Multiple-Key & Other Indexes', link: '/17_4-multiple-key-and-other-indexes' },
+              { text: '5. Indexing Issues & Physical Design', link: '/17_5-indexing-issues-and-physical-design' },
+            ]
+          },
         ]
       },
       {
