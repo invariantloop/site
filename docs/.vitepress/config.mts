@@ -142,6 +142,18 @@ export default defineConfig({
               { text: '6. Physical Database Design', link: '/17_6-physical-database-design-in-relational-databases' },
             ]
           },
+          {
+            text: 'Chapter 5 — Strategies for Query Processing',
+            collapsed: true,
+            items: [
+              { text: '1. Query Processing Overview', link: '/18_1-query-processing-overview' },
+              { text: '2. External Sorting', link: '/18_2-external-sorting' },
+              { text: '3. SELECT Operation', link: '/18_3-select-operation' },
+              { text: '4. JOIN Operation', link: '/18_4-join-operation' },
+              { text: '5. PROJECT, Set & Aggregate Operations', link: '/18_5-project-set-and-aggregate-operations' },
+              { text: '6. Pipelining & Parallel Query Processing', link: '/18_6-pipelining-and-parallel-query-processing' },
+            ]
+          },
         ]
       },
       {
