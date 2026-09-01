@@ -138,7 +138,8 @@ export default defineConfig({
               { text: '2. Multilevel Indexes & Search Trees', link: '/17_2-multilevel-indexes' },
               { text: '3. B-Trees & B⁺-Trees', link: '/17_3-b-trees-and-b-plus-trees' },
               { text: '4. Multiple-Key & Other Indexes', link: '/17_4-multiple-key-and-other-indexes' },
-              { text: '5. Indexing Issues & Physical Design', link: '/17_5-indexing-issues-and-physical-design' },
+              { text: '5. General Issues Concerning Indexing', link: '/17_5-indexing-issues-and-physical-design' },
+              { text: '6. Physical Database Design', link: '/17_6-physical-database-design-in-relational-databases' },
             ]
           },
         ]
