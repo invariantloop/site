@@ -32,24 +32,13 @@ Let:
 - $b_R$ and $b_S$ be the numbers of blocks in $R$ and $S$;
 - $r_R$ and $r_S$ be their numbers of records;
 - $n_B$ be the buffer blocks available to the join;
-- $x$ be the number of index levels traversed for an inner lookup;
-- $js$ be the join selection factor.
+- $x$ be the number of index levels traversed for an inner lookup.
 
 The formulas below count input block transfers and generally exclude the cost of writing the join result. Every algorithm must produce the same logical result, so output cost is often separated when comparing alternatives. In practice, a large output can dominate all other costs.
 
-## Join Selection Factor
+## Join Result Cardinality
 
-The <mark>**join selection factor**</mark> is the fraction of pairs in the Cartesian product that satisfy the join condition:
-
-$$
-js = \frac{|R \bowtie S|}{|R|\,|S|}
-$$
-
-Therefore, the estimated number of output records is:
-
-$$
-|R \bowtie S| \approx js \cdot r_R \cdot r_S
-$$
+The number of records produced by a join depends on key constraints and the frequency of each join value.
 
 For a foreign-key-to-primary-key join in which every foreign key has a matching parent, each child record joins with exactly one parent. If `Orders` is the child relation:
 
@@ -68,6 +57,17 @@ output records.
 :::warning Input cost is not the whole query cost
 A join plan that reads its inputs efficiently can still be expensive when it generates a huge intermediate result. Join order and earlier selections matter because they change both input sizes and output cardinality.
 :::
+
+## Methods for Implementing Joins
+
+The textbook labels the four basic methods as follows:
+
+| Method | Name |
+|---|---|
+| J1 | Nested-loop join, also called nested-block join for disk files |
+| J2 | Index-based nested-loop join using an index or hash access structure |
+| J3 | Sort-merge join |
+| J4 | Partition-hash join, or hash-join |
 
 ## J1 — Nested-Loop Join
 
@@ -100,86 +100,6 @@ b_S + r_S b_R
 $$
 
 The two expressions can be very different, so “left” and “right” in the SQL text do not necessarily determine the physical outer and inner roles.
-
-## Block Nested-Loop Join
-
-Real implementations improve J1 by comparing <mark>**blocks**</mark> or groups of blocks rather than repeatedly fetching one inner file per outer record.
-
-With $n_B$ available buffers, reserve:
-
-- $n_B-2$ buffers for a chunk of the outer relation;
-- one buffer for scanning the inner relation;
-- one buffer for output.
-
-```text
-load up to nB - 2 outer blocks
-              ↓
-scan every inner block once
-              ↓
-compare all records in the resident outer chunk
-              ↓
-load the next outer chunk and repeat
-```
-
-If $R$ is outer, its blocks are loaded once and $S$ is scanned once per outer chunk:
-
-$$
-\operatorname{Cost}_{block\ NLJ}(R,S)
-= b_R
-+ \left\lceil \frac{b_R}{n_B-2} \right\rceil b_S
-$$
-
-If only one outer block is buffered at a time, this reduces to approximately:
-
-$$
-b_R + b_Rb_S
-$$
-
-### Choosing the outer relation
-
-For block nested-loop join, it is generally advantageous to make the relation requiring fewer outer chunks the outer input. Compare both orientations:
-
-$$
-b_R + \left\lceil \frac{b_R}{n_B-2} \right\rceil b_S
-$$
-
-and:
-
-$$
-b_S + \left\lceil \frac{b_S}{n_B-2} \right\rceil b_R
-$$
-
-The smaller relation is often the better outer input because more—or all—of it can remain in memory while the larger inner file is scanned.
-
-:::info Buffer memory changes the algorithm
-If the entire outer input fits in $n_B-2$ blocks, the inner input is scanned only once. The input cost then approaches $b_R+b_S$, even without an index or ordering.
-:::
-
-### Worked block nested-loop cost
-
-Suppose:
-
-$$
-b_{Customers}=500,\qquad b_{Orders}=8{,}000,\qquad n_B=52
-$$
-
-Using `Customers` as outer gives 50 outer-block buffers:
-
-$$
-500 + \left\lceil\frac{500}{50}\right\rceil(8{,}000)
-= 80{,}500
-$$
-
-block transfers.
-
-Reversing the inputs gives:
-
-$$
-8{,}000 + \left\lceil\frac{8{,}000}{50}\right\rceil(500)
-= 88{,}000
-$$
-
-The first orientation is cheaper, but both repeatedly scan an input. An index, compatible ordering, or hash partitioning can do much better.
 
 ## J2 — Index-Based Nested-Loop Join
 
@@ -354,6 +274,56 @@ $$
 
 where $M$ is the number of partitions.
 
+In the basic J4 case, the smaller file fits in the available memory after it is organized into hash buckets. The smaller file is scanned once to build the in-memory hash table, and the larger file is scanned once to probe it.
+
+## How Buffer Space and Choice of Outer-Loop File Affect Performance of Nested-Loop Join
+
+Real implementations improve J1 by comparing <mark>**blocks**</mark> or groups of blocks rather than repeatedly fetching one inner file per outer record.
+
+With $n_B$ available buffers, reserve $n_B-2$ buffers for a chunk of the outer relation, one buffer for scanning the inner relation, and one buffer for output.
+
+If $R$ is outer, its blocks are loaded once and $S$ is scanned once per outer chunk:
+
+$$
+\operatorname{Cost}_{block\ NLJ}(R,S)
+= b_R
++ \left\lceil \frac{b_R}{n_B-2} \right\rceil b_S
+$$
+
+If only one outer block is buffered at a time, this reduces to approximately $b_R+b_Rb_S$.
+
+### Choosing the outer relation
+
+Compare both orientations:
+
+$$
+b_R + \left\lceil \frac{b_R}{n_B-2} \right\rceil b_S
+\qquad\text{and}\qquad
+b_S + \left\lceil \frac{b_S}{n_B-2} \right\rceil b_R
+$$
+
+The relation with fewer blocks is generally the better outer input because it requires fewer outer chunks. If the entire outer input fits in $n_B-2$ blocks, the inner input is scanned only once and the input cost approaches $b_R+b_S$.
+
+For $b_{Customers}=500$, $b_{Orders}=8{,}000$, and $n_B=52$, using `Customers` as outer costs $80{,}500$ block reads, whereas the reverse orientation costs $88{,}000$.
+
+## How the Join Selection Factor Affects Join Performance
+
+For a particular input file, the <mark>**join selection factor**</mark> is the fraction of that file's records that participate in the join. It is defined separately for each input:
+
+$$
+js_R = \frac{\text{records of }R\text{ that participate in the join}}{r_R},
+\qquad
+js_S = \frac{\text{records of }S\text{ that participate in the join}}{r_S}
+$$
+
+Both factors lie between 0 and 1. They describe participation, not the join result divided by the Cartesian-product size.
+
+For the `Customers`–`Orders` foreign-key join, if every order refers to an existing customer, then $js_{Orders}=1$. However, $js_{Customers}$ may be less than 1 because some customers may have no orders.
+
+For J2, either the smaller file or a file with a high join selection factor should be the outer file, provided the other file has the required access path. A smaller outer file causes fewer probes; a high outer selection factor avoids probes that produce no joined record.
+
+## General Case for Partition-Hash Join
+
 ### Partitioning phase
 
 Scan both inputs and distribute their records using $h$:
@@ -418,19 +388,6 @@ $$
 
 plus CPU work for building and probing the hash table.
 
-### Hybrid hash join
-
-A <mark>**hybrid hash join**</mark> keeps one or more build partitions resident during the initial partitioning phase. Probe records belonging to those resident partitions can be joined immediately.
-
-This avoids writing and rereading the resident partitions:
-
-```text
-partition 0: keep in memory and join now
-partitions 1..M-1: spill to disk and join later
-```
-
-The larger the useful resident portion, the closer the cost moves from the two-pass $3(b_R+b_S)$ estimate toward an in-memory scan.
-
 ### Data skew and recursive partitioning
 
 Hash join depends on reasonably balanced partitions. A frequent join value can create an oversized partition even when the average partition size is small.
@@ -454,6 +411,19 @@ Partition-hash join is effective when:
 - hash values are distributed without severe skew.
 
 It does not directly support general inequality conditions such as $R.A < S.B$, because unequal values that should join may hash to different partitions.
+
+## Hybrid Hash-Join
+
+A <mark>**hybrid hash join**</mark> keeps one or more build partitions resident during the initial partitioning phase. Probe records belonging to those resident partitions can be joined immediately.
+
+This avoids writing and rereading the resident partitions:
+
+```text
+partition 0: keep in memory and join now
+partitions 1..M-1: spill to disk and join later
+```
+
+The larger the useful resident portion, the closer the cost moves from the two-pass $3(b_R+b_S)$ estimate toward an in-memory scan.
 
 ## Comparing the Four Join Methods
 

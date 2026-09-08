@@ -4,6 +4,10 @@ outline: deep
 
 ## Combining Operations Using Pipelining
 
+:::info Textbook section map
+This note combines Section 18.7, **Combining Operations Using Pipelining**, with Section 18.8, **Parallel Algorithms for Query Processing**, from the seventh edition.
+:::
+
 A physical query plan is a tree of operators. A straightforward implementation finishes one operator, writes its complete output to a temporary file, and then lets the parent operator read that file.
 
 This approach is called <mark>**materialized evaluation**</mark>:
@@ -101,7 +105,7 @@ Some operators are only partially blocking. A partitioned hash operator can fini
 Pipelining often improves time to first row and removes temporary I/O. It does not guarantee the smallest total runtime if a materialized result enables reuse, better locality, or a cheaper downstream algorithm.
 :::
 
-## Iterators for Physical Operators
+## Iterators for Implementing Physical Operators
 
 Many DBMS execution engines expose each physical operator through an <mark>**iterator**</mark> interface:
 
@@ -414,7 +418,7 @@ $$
 
 Hash partitioning supports equality lookup, grouping, equality joins, and set operations because equal keys are sent to the same processor. It does not preserve range order and can still skew when a few key values are extremely frequent.
 
-## Parallelism at the Operator Level
+## Operator-Level Parallelism
 
 <mark>**Operator-level parallelism**</mark> executes one relational operator over multiple data partitions. Each worker performs a local version of the operation, followed by any required merge, redistribution, or reduction.
 

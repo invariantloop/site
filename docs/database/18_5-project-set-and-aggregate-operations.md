@@ -4,6 +4,10 @@ outline: deep
 
 ## Algorithms for PROJECT and Set Operations
 
+:::info Textbook section map
+This note combines Section 18.5, **Algorithms for PROJECT and Set Operations**, with Section 18.6, **Implementing Aggregate Operations and Different Types of JOINs**, from the seventh edition.
+:::
+
 Selection and join decide which records participate in a query. <mark>**Projection**</mark> decides which attributes remain, while set operations combine complete compatible results. These operations appear simple at the logical level but may require sorting, hashing, duplicate elimination, and large intermediate files.
 
 ## Implementing PROJECT
@@ -167,7 +171,13 @@ UNION
 SELECT customer_id FROM Customers_2026;
 ```
 
-Under set semantics, the result contains no duplicates. SQL provides `UNION ALL` to concatenate both bags without set duplicate elimination.
+Under set semantics, the result contains no duplicates. SQL's `ALL` variants preserve bag multiplicities:
+
+- `UNION ALL` keeps $m+n$ copies of a tuple that occurs $m$ times in $R$ and $n$ times in $S$;
+- `INTERSECT ALL` keeps $\min(m,n)$ copies;
+- `EXCEPT ALL` keeps $\max(m-n,0)$ copies for $R-S$.
+
+Without `ALL`, duplicate elimination reduces each result tuple to one copy.
 
 ## Sort-Merge Set Operations
 
@@ -573,11 +583,11 @@ A `HAVING` condition that does not depend on aggregates may sometimes be moved e
 
 Section 18.4 covered inner equijoins. Query processing must also implement joins that preserve unmatched records or return records from only one input.
 
-## Outer Joins
+### Outer Joins
 
 An inner join emits matching pairs only. Outer joins additionally preserve unmatched records and extend the missing side with `NULL` values.
 
-### Left outer join
+#### Left outer join
 
 ```sql
 SELECT C.customer_id, C.name, O.order_id
@@ -592,12 +602,12 @@ Every customer appears. A customer with no order produces:
 (customer_id, name, NULL)
 ```
 
-### Right and full outer joins
+#### Right and full outer joins
 
 - A right outer join preserves every record from the right input.
 - A full outer join preserves unmatched records from both inputs.
 
-### Outer nested-loop join
+#### Outer nested-loop join
 
 Modify nested-loop join by keeping a `matched` flag for each preserved outer record:
 
@@ -613,7 +623,7 @@ for each customer c:
 
 For a full outer join, the algorithm must also remember which inner records matched and emit the unmatched inner records afterward.
 
-### Outer sort-merge join
+#### Outer sort-merge join
 
 While scanning ordered inputs:
 
@@ -622,7 +632,7 @@ While scanning ordered inputs:
 - a right-side key smaller than the current left key is handled symmetrically when the right side is preserved;
 - remaining records are emitted with `NULL` after the other input ends if their side is preserved.
 
-### Outer hash join
+#### Outer hash join
 
 A hash implementation tracks matched records in the preserved build or probe side. After probing, it emits the unmatched preserved records with `NULL` values for the missing side.
 
@@ -630,7 +640,7 @@ A hash implementation tracks matched records in the preserved build or probe sid
 An inner join can often be reordered using commutativity and associativity. Outer joins encode preservation and `NULL` introduction, so changing join order or pushing predicates across them can change the result.
 :::
 
-## Semijoin
+### Semijoin
 
 A left semijoin returns each left record that has at least one right match, but does not append right-side attributes:
 
@@ -656,7 +666,7 @@ The implementation needs only an existence test:
 
 A semijoin can be cheaper than a full join followed by projection because it avoids constructing all matching pairs and then removing repeated left records.
 
-## Antijoin
+### Antijoin
 
 A left antijoin returns left records with no right match:
 
@@ -681,6 +691,19 @@ Its physical implementations invert the semijoin existence test:
 - emit a probe record when its key is absent from the build hash table.
 
 Anti-join output depends on which input is preserved and on SQL `NULL` semantics. It should not be treated as a symmetric operation.
+
+### Non-Equi-Join
+
+A <mark>**non-equi-join**</mark> uses a comparison other than equality, for example:
+
+```sql
+SELECT L.*, R.*
+FROM LowerBounds AS L
+JOIN UpperBounds AS R
+  ON L.value < R.value;
+```
+
+Nested-loop join applies without requiring equality because it can test any comparison for each candidate pair. Sort-based and index-based implementations can also exploit ordered values to avoid testing every pair. Partition-hash join does not directly implement a general inequality condition, because values that satisfy `<`, `>`, `<=`, or `>=` need not hash to the same partition.
 
 ## Worked Combined Example
 
@@ -732,16 +755,16 @@ When choosing implementations for projection, sets, aggregation, or special join
 6. Is a Cartesian product accidental and replaceable by a direct join?
 7. Can an index answer `MIN`, `MAX`, projection, or grouping without data access?
 8. How do `NULL` values affect aggregates, set predicates, or antijoins?
-9. Which side of an outer, semi-, or antijoin must be preserved?
+9. Which side of an outer, semi-, or antijoin must be preserved, and is the join condition equality or an inequality?
 10. Can early projection, selection, or aggregation shrink a later join?
 
 ## PROJECT, Set, Aggregate, and JOIN — Summary
 
 - Ordinary SQL projection streams and preserves duplicates; `DISTINCT` requires duplicate elimination.
 - Sorting and hashing are the main implementations for distinct projection, set operations, and grouping.
-- `UNION`, `INTERSECTION`, and `SET DIFFERENCE` operate on compatible tuples; `UNION ALL` avoids set deduplication.
+- `UNION`, `INTERSECTION`, and `SET DIFFERENCE` operate on compatible tuples; their `ALL` variants preserve bag multiplicities.
 - Table scans compute aggregates in one pass, while compatible indexes can accelerate or cover specific aggregates.
 - Grouping partitions records by grouping keys through sorting, hashing, clustering, or an existing order.
 - `WHERE` filters before aggregation; `HAVING` filters completed groups.
-- Outer joins preserve unmatched records with `NULL`; semijoins test existence; antijoins test nonexistence.
+- Outer joins preserve unmatched records with `NULL`; semijoins test existence; antijoins test nonexistence; non-equi-joins use comparison conditions other than equality.
 - Duplicate and `NULL` semantics determine which rewrites and physical algorithms are valid.

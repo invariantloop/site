@@ -20,7 +20,9 @@ WHERE customer_id = 42;
 
 Selection does not mean the SQL `SELECT` list; the relational operation corresponds specifically to filtering rows. The DBMS can implement the same selection using a scan, the physical ordering of the file, hashing, or one or more indexes.
 
-## Cost Notation
+## Implementation Options for the SELECT Operation
+
+### Cost notation
 
 Let:
 
@@ -33,7 +35,7 @@ Let:
 
 The formulas below emphasize block accesses. Exact cost also depends on buffering, cached pages, index layout, overflow blocks, and whether the output must be written to disk.
 
-## Simple Selection Conditions
+### Simple selection conditions
 
 A simple condition compares one attribute with a constant:
 
@@ -50,7 +52,7 @@ The available algorithm depends on four questions:
 3. Is a primary, clustering, or secondary index available on $A$?
 4. Does the predicate use equality or a range comparison?
 
-## S1 — Linear Search
+### S1 — Linear Search
 
 A <mark>**linear search**</mark> scans the file block by block and tests every record.
 
@@ -64,7 +66,7 @@ for each block B of R:
 
 Linear search works for every selection condition and every file organization.
 
-### Cost
+#### Cost
 
 For a nonkey condition or a query that may return many records, the scan must inspect the whole file:
 
@@ -84,7 +86,7 @@ The worst case remains $b$ blocks when the record is near the end or does not ex
 If a predicate returns a large fraction of the relation, reading the file sequentially can be cheaper than following many index pointers to scattered blocks. A scan is also the only general fallback when no usable access path exists.
 :::
 
-## S2 — Binary Search on an Ordered File
+### S2 — Binary Search on an Ordered File
 
 If the data file is physically ordered on attribute $A$, binary search can locate a block containing a target value:
 
@@ -104,16 +106,16 @@ $$
 
 If $A$ is a nonkey ordering field, equal values can occupy several consecutive blocks. Binary search locates one matching block, but the algorithm must move to the first matching block and scan the remaining matching run.
 
-### Limitations
+#### Limitations
 
 - Binary search requires physical ordering on the search attribute.
 - Accessing the middle block repeatedly is random I/O.
 - Insertions are expensive to maintain in a sorted file.
 - A sparse primary or clustering index normally reaches the target with fewer accesses than binary-searching a large data file.
 
-## S3 — Primary Index or Hash Access for One Record
+### S3a — Using a Primary Index
 
-For equality on a key attribute, a primary index or hash organization can retrieve at most one record.
+For equality on a key attribute, a primary index can retrieve at most one record.
 
 ```sql
 SELECT *
@@ -121,17 +123,15 @@ FROM Orders
 WHERE order_id = 700042;
 ```
 
-### Primary index
-
 With a multilevel primary index of height $x$, the algorithm traverses the index and then reads the target data block:
 
 $$
-\operatorname{Cost}_{S3,index} \approx x + 1
+\operatorname{Cost}_{S3a} \approx x + 1
 $$
 
 The data-block access may already be cached, but the formula counts it explicitly.
 
-### Hash key
+### S3b — Using a Hash Key
 
 If the file is hashed on `order_id`, the hash function computes the bucket directly:
 
@@ -141,7 +141,7 @@ $$
 
 Equality access is usually very efficient, though collisions and overflow blocks can add I/O. Hash access does not naturally support range conditions such as `order_id > 700000`.
 
-## S4 — Primary Index for a Range
+### S4 — Using a Primary Index to Retrieve Multiple Records
 
 An ordered primary index supports range predicates on the ordering key:
 
@@ -161,7 +161,7 @@ For a lower-bound condition such as $A \ge c$, the index identifies the starting
 
 The important property is clustering: records with neighboring key values occupy neighboring data blocks.
 
-## S5 — Clustering Index for Multiple Records
+### S5 — Using a Clustering Index to Retrieve Multiple Records
 
 A clustering index is built on a nonkey ordering field. All records having the same field value are stored together.
 
@@ -189,11 +189,11 @@ Overflow blocks or variable-length records can make the actual value larger.
 An index finds record references. Clustering determines whether following those references touches a short sequential range or many unrelated data blocks.
 :::
 
-## S6 — Secondary Index
+### S6 — Using a Secondary B⁺-Tree Index
 
 A secondary index provides an access path on an attribute that does not determine the physical order of the data file.
 
-### Equality on a key
+#### Equality on a key
 
 For a secondary index on a unique key, index traversal returns one record pointer:
 
@@ -201,7 +201,7 @@ $$
 \operatorname{Cost}_{S6,key} \approx x + 1
 $$
 
-### Equality on a nonkey
+#### Equality on a nonkey
 
 For a nonkey field, one value may identify many records. The leaf entry may contain a pointer list, or several leaf entries may repeat the search-key value.
 
@@ -217,7 +217,7 @@ $$
 b_s = s
 $$
 
-### Range through a secondary B⁺-tree
+#### Range through a secondary B⁺-tree
 
 The tree can locate the first qualifying leaf entry and scan leaf pages in order. This is excellent when the range is selective or when the query is covered by the index.
 
@@ -227,21 +227,62 @@ If full records are required and many qualify, the record pointers may cause man
 An optimizer can reject an available index. The correct comparison includes both index traversal and data-page retrieval, not merely the cost of finding leaf entries.
 :::
 
-## Comparing the Simple-Selection Methods
+### S7a — Using a Bitmap Index
+
+A bitmap index stores one bit vector for each indexed value. Bit position $i$ is 1 when record $i$ has that value and 0 otherwise.
+
+For an enumerated predicate:
+
+```sql
+SELECT *
+FROM Orders
+WHERE status IN ('paid', 'pending', 'refunded');
+```
+
+the qualifying record IDs are found by OR-ing the three value bitmaps:
+
+$$
+B_{paid}\ \lor\ B_{pending}\ \lor\ B_{refunded}
+$$
+
+The resulting 1-bits identify records satisfying at least one listed value. Bitmap operations are also useful for conjunctive predicates: bitmaps from different conditions can be combined with bitwise `AND`.
+
+### S7b — Using a Functional Index
+
+A functional index stores the result of an expression over one or more attributes. It can support a selection whose predicate applies the corresponding expression.
+
+```sql
+CREATE INDEX orders_adjusted_total_idx
+ON Orders (total_amount + total_amount * tax_rate);
+```
+
+The index can serve a query such as:
+
+```sql
+SELECT order_id
+FROM Orders
+WHERE total_amount + total_amount * tax_rate > 1000000;
+```
+
+Without the functional index, an ordinary index on `total_amount` does not directly order records by the computed adjusted total. Expression-index syntax is DBMS-specific, but the access-path idea is the same.
+
+### Comparing the simple-selection methods
 
 | Method | Required organization | Good predicate | Approximate block cost |
 |---|---|---|---:|
 | S1 linear search | none | any; especially low selectivity | $b$ |
 | S2 binary search | file ordered on $A$ | equality on ordering field | $\lceil\log_2 b\rceil + b_s$ |
-| S3 primary index | primary index on key | key equality | $x+1$ |
-| S3 hash access | hashed on key | key equality | bucket access + overflow |
+| S3a primary index | primary index on key | key equality | $x+1$ |
+| S3b hash access | hashed on key | key equality | bucket access + overflow |
 | S4 primary-index range | file ordered on key | range on ordering key | $x+b_s$ |
-| S5 clustering index | clustered on nonkey | equality/range returning a cluster | $x+b_s$ |
+| S5 clustering index | clustered on nonkey | equality returning multiple records | $x+b_s$ |
 | S6 secondary index | secondary access path | selective equality/range | $x+b_s$ |
+| S7a bitmap index | bitmap per indexed value | enumerated set or bitmap combination | bitmap reads + record fetches |
+| S7b functional index | index on matching expression | predicate on a computed value | index traversal + record fetches |
 
 These are simplified estimates. The actual plan decision uses catalog statistics and a more detailed cost model.
 
-## Conjunctive Selection
+## Search Methods for Conjunctive Selection
 
 A conjunctive condition requires all simple predicates to be true:
 
@@ -261,7 +302,7 @@ WHERE customer_id = 42
 
 The DBMS has several strategies.
 
-## S7 — Use One Access Path, Then Test the Rest
+### S8 — Conjunctive Selection Using an Individual Index
 
 Choose one predicate with a usable access path, retrieve its candidate records, and evaluate every remaining predicate in memory.
 
@@ -281,29 +322,29 @@ The best single access path is normally the one expected to produce the fewest o
 Writing `customer_id = 42` before `status = 'paid'` does not force the DBMS to evaluate it first. For deterministic predicates joined by `AND`, the optimizer can choose an economical evaluation order.
 :::
 
-## S8 — Use a Composite Index
+### S9 — Conjunctive Selection Using a Composite Index
 
-A composite index can satisfy several predicates together:
+A composite index can satisfy several predicates together. The textbook's S9 case uses equality conditions on two or more attributes and a matching composite index or hash structure:
 
 ```sql
-CREATE INDEX orders_customer_date_idx
-ON Orders (customer_id, ordered_at);
+CREATE INDEX orders_customer_status_idx
+ON Orders (customer_id, status);
 ```
 
 This matches:
 
 ```sql
 WHERE customer_id = 42
-  AND ordered_at >= DATE '2026-01-01'
+  AND status = 'paid'
 ```
 
-The B⁺-tree first locates the `customer_id = 42` range and then scans the ordered `ordered_at` values within that customer.
+The composite access path retrieves records satisfying both equality conditions directly.
 
-Attribute order matters. An index on `(ordered_at, customer_id)` has a different lexicographic order and is not the same access path for this query.
+For a B⁺-tree, attribute order still matters. An index on `(status, customer_id)` has a different lexicographic order, although both equality predicates can constrain this particular lookup. Practical B⁺-tree implementations can also use an equality prefix followed by a range on the next field, but that is broader than the equality case used to define S9 in the textbook.
 
 If all columns required by the query are stored in the index, an <mark>**index-only**</mark> plan may avoid reading data blocks entirely.
 
-## S9 — Intersect Record Pointers
+### S10 — Conjunctive Selection by Intersection of Record Pointers
 
 If separate indexes exist on several attributes, the DBMS can retrieve record-pointer sets and intersect them:
 
@@ -325,7 +366,7 @@ Pointer intersection is attractive when each index is moderately selective and t
 
 It is less useful when one index alone already returns very few records or when producing large pointer sets costs more than scanning the file.
 
-## Disjunctive Selection
+## Search Methods for Disjunctive Selection
 
 A disjunctive condition accepts a record when at least one predicate is true:
 
@@ -354,13 +395,43 @@ If even one disjunct lacks an access path, retrieving only the indexed disjuncts
 For `AND`, one selective index can produce candidates and the remaining conditions can be tested on those candidates. For `OR`, an unindexed branch can contribute records outside every indexed candidate set, so scanning may be unavoidable.
 :::
 
-## Selectivity and the Scan-versus-Index Decision
+## Estimating the Selectivity of a Condition
 
-The <mark>**selectivity**</mark> of a predicate is the fraction of relation records it returns:
+The system catalog normally stores statistics such as:
+
+- the number of records $r_R$, record size, number of blocks $b_R$, and blocking factor for relation $R$;
+- the number of distinct values $d_A$ for an attribute $A$;
+- the minimum and maximum values of an ordered attribute;
+- histograms that describe nonuniform value distributions.
+
+The <mark>**selectivity**</mark> of a predicate is the fraction of relation records it is expected to return:
 
 $$
-selectivity = \frac{s}{r}
+sl = \frac{s}{r_R}
 $$
+
+For equality on a key, the expected selection cardinality is one record, so:
+
+$$
+sl(A=c)=\frac{1}{r_R}
+$$
+
+For equality on a nonkey attribute, assuming values are uniformly distributed:
+
+$$
+s \approx \frac{r_R}{d_A},
+\qquad
+sl(A=c) \approx \frac{1}{d_A}
+$$
+
+For a range $A \ge c$, assuming a uniform distribution between $min(A)$ and $max(A)$:
+
+$$
+sl(A \ge c) \approx
+\frac{max(A)-c}{max(A)-min(A)}
+$$
+
+The estimate is 1 when $c \le min(A)$ and 0 when $c > max(A)$. Histograms give better estimates when data is skewed, because uniform-distribution formulas can be badly misleading for popular values.
 
 Suppose `Orders` contains 10 million records:
 
@@ -386,8 +457,8 @@ Assume `Orders` occupies 100,000 blocks and has these access paths:
 CREATE UNIQUE INDEX orders_id_idx
 ON Orders (order_id);
 
-CREATE INDEX orders_customer_date_idx
-ON Orders (customer_id, ordered_at);
+CREATE INDEX orders_customer_status_idx
+ON Orders (customer_id, status);
 ```
 
 Consider three queries.
@@ -400,18 +471,18 @@ FROM Orders
 WHERE order_id = 700042;
 ```
 
-Use S3 with the unique index. A short index traversal plus one data-block access is far cheaper than scanning up to 100,000 blocks.
+Use S3a with the unique index. A short index traversal plus one data-block access is far cheaper than scanning up to 100,000 blocks.
 
-### Query B — Equality plus range
+### Query B — Multiple equality conditions
 
 ```sql
 SELECT order_id, total_amount
 FROM Orders
 WHERE customer_id = 42
-  AND ordered_at >= DATE '2026-01-01';
+  AND status = 'paid';
 ```
 
-Use S8 with `(customer_id, ordered_at)`. The composite order matches equality on the leading field and a range on the next field. If `order_id` and `total_amount` are not included in the index, qualifying records must still be fetched from the data file.
+Use S9 with `(customer_id, status)`. The composite access path matches both equality conditions. If `order_id` and `total_amount` are not included in the index, qualifying records must still be fetched from the data file.
 
 ### Query C — Large nonclustered result
 
@@ -441,8 +512,9 @@ For a selection predicate, ask:
 
 - Linear search works for all predicates and remains competitive for large result sets.
 - Binary search requires a physically ordered file; a primary index generally gives a shorter search path.
-- Primary indexes and hashing are effective for key equality; ordered indexes also support ranges.
+- S3a uses a primary index for key equality, while S3b uses hashing on a key.
+- S7a uses bitmap indexes; S7b uses functional indexes for computed expressions.
 - Clustering keeps matching records together, while secondary-index results may be scattered across many blocks.
-- Conjunctions can use one access path, a composite index, or pointer intersection.
+- Conjunctions use S8 with one individual index, S9 with a composite index, or S10 with pointer intersection.
 - Disjunctions can use pointer union only when every branch has a usable access path; otherwise a scan may be required.
 - The cheapest plan depends on block-level selectivity and locality, not merely on whether an index exists.

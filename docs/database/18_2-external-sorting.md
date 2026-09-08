@@ -19,6 +19,8 @@ Let:
 
 When $b > n_B$, the entire file cannot be sorted in one memory load. The algorithm therefore creates smaller sorted files and repeatedly merges them.
 
+External merge sorting needs at least three buffers: two input buffers and one output buffer. Thus $n_B \ge 3$, and the minimum merge degree is two.
+
 :::tip Sorted run
 A <mark>**run**</mark> is a sequence of blocks whose records are already sorted on the requested sort key. Each initial run fits in memory when it is created, but the final run may be as large as the whole input file.
 :::

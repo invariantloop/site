@@ -167,40 +167,93 @@ Data conceptually flows upward. A physical plan annotates each node with an impl
 
 ## Query Blocks and Nested Queries
 
-Each `SELECT-FROM-WHERE` expression forms a <mark>**query block**</mark>. A nested query introduces another block that can initially be translated separately.
+Each `SELECT-FROM-WHERE` expression, together with its `GROUP BY` and `HAVING` clauses when present, forms a <mark>**query block**</mark>. A nested query introduces another block that can initially be translated separately.
 
 ```sql
-SELECT customer_id, name
-FROM Customers
-WHERE customer_id IN (
-  SELECT customer_id
+SELECT order_id, total_amount
+FROM Orders
+WHERE total_amount > (
+  SELECT MAX(total_amount)
   FROM Orders
-  WHERE total_amount >= 1000000
+  WHERE status = 'pending'
 );
 ```
 
-The inner block finds customer IDs from qualifying orders. The outer block tests membership of each customer ID in that result.
-
-Conceptually, the query uses a semijoin:
+The inner block is uncorrelated and returns one value. It can be translated independently:
 
 $$
-\pi_{customer\_id,\ name}
-\left(
-Customers \ltimes
-\pi_{customer\_id}
-(\sigma_{total\_amount \ge 1000000}(Orders))
-\right)
+c \leftarrow \mathcal{G}_{MAX(total\_amount)}
+(\sigma_{status='pending'}(Orders))
 $$
 
-An optimizer may <mark>**unnest**</mark> the subquery into a join-like plan. A correlated subquery is more complicated because its inner block refers to values from the outer block; naïve execution could rerun the inner query once for every outer tuple.
+The outer block then uses that result as the constant $c$:
+
+$$
+\pi_{order\_id,\ total\_amount}
+(\sigma_{total\_amount>c}(Orders))
+$$
+
+Because the inner block does not refer to the outer query, it needs to be evaluated only once. A correlated subquery is more complicated because its inner block refers to an outer tuple variable; DBMSs use unnesting and other optimization techniques to avoid naïvely rerunning it for every outer tuple.
 
 :::warning SQL is not set algebra by default
 Relational algebra is traditionally set-based, while SQL normally preserves duplicates. A translation must account for SQL's bag semantics and introduce duplicate elimination only when required by `DISTINCT`, set operators, or another semantic rule.
 :::
 
-## Operators Beyond Basic Relational Algebra
+## Additional Operators: Semi-Join and Anti-Join
 
-SQL requires operations that are not fully represented by the basic selection, projection, product, union, difference, and rename operators.
+Some nested subqueries are unnested into join variants that are not among the basic relational-algebra operations.
+
+### Semijoin
+
+A <mark>**semijoin**</mark> is commonly used when unnesting `EXISTS`, `IN`, or `ANY`. It returns a left-side record as soon as one right-side match is found; it does not search for every possible match or append right-side attributes.
+
+```sql
+SELECT COUNT(*)
+FROM Customers AS C
+WHERE C.customer_id IN (
+  SELECT O.customer_id
+  FROM Orders AS O
+  WHERE O.total_amount > 1000000
+);
+```
+
+Conceptually, the query uses:
+
+$$
+Customers \ltimes
+\pi_{customer\_id}
+(\sigma_{total\_amount>1000000}(Orders))
+$$
+
+Even if one customer has many qualifying orders, that customer contributes only one left-side record to the semijoin result.
+
+### Antijoin
+
+An <mark>**antijoin**</mark> is used when unnesting forms such as `NOT EXISTS`, `NOT IN`, or `ALL`. A left-side record is rejected as soon as a right-side match is found and returned only if no match exists.
+
+```sql
+SELECT COUNT(*)
+FROM Customers AS C
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM Orders AS O
+  WHERE O.customer_id = C.customer_id
+);
+```
+
+Conceptually:
+
+$$
+Customers \triangleright Orders
+$$
+
+:::warning `NOT IN` and `NULL`
+SQL's three-valued logic makes `NOT IN` behave differently when its subquery can return `NULL`. The antijoin transformation must preserve the original query's `NULL` semantics; `NOT EXISTS` avoids that particular trap.
+:::
+
+## Supplemental SQL Operators
+
+SQL also requires operations that are not fully represented by the basic selection, projection, product, union, difference, and rename operators.
 
 ### Duplicate elimination
 
@@ -256,20 +309,6 @@ LEFT JOIN Orders AS O
 
 The execution algorithm must therefore track which tuples matched; a plain inner-join implementation is not sufficient.
 
-### Semijoin and antijoin behavior
-
-Existence predicates often translate to semijoin-like or antijoin-like operators:
-
-```sql
--- Customers with at least one order
-WHERE EXISTS (...)
-
--- Customers with no order
-WHERE NOT EXISTS (...)
-```
-
-A semijoin returns matching tuples from one side without copying columns from the other side. An antijoin returns tuples from one side for which no match exists.
-
 ## From Logical Expression to Execution Plan
 
 Translation alone does not determine the execution strategy. For every logical operator, the DBMS still needs choices such as:
@@ -306,7 +345,8 @@ When reading a SQL query, identify:
 
 - SQL specifies a result; the DBMS chooses the physical procedure.
 - Parsing checks grammar, while validation resolves names, types, privileges, and schema rules.
-- A query block can be translated into a relational-algebra expression or query tree.
+- A query block contains one `SELECT-FROM-WHERE` expression plus any associated `GROUP BY` and `HAVING` clauses, and can be translated into an extended relational-algebra expression or query tree.
+- Semijoins and antijoins support unnesting of existence and nonexistence subqueries without producing all inner-join matches.
 - Logical equivalences expose alternatives, such as applying selective predicates before a join.
 - SQL additionally needs duplicate elimination, ordering, grouping, aggregation, and outer-join behavior.
 - The optimizer maps logical operators to physical algorithms and produces an executable plan.
