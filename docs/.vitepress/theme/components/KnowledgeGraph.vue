@@ -7,6 +7,12 @@ const router    = useRouter()
 const { isDark } = useData()
 let graphInstance = null
 let resizeObserver = null
+let graphNodes = []
+let degreeMap = {}
+let hoveredNode = null
+
+const highlightNodes = new Set()
+const highlightLinks = new Set()
 
 const GROUP_META = {
   math:    { color: '#3b82f6', glow: '#93c5fd' },
@@ -14,6 +20,10 @@ const GROUP_META = {
   crypto:  { color: '#8b5cf6', glow: '#c4b5fd' },
   rel:     { color: '#f6b15c', glow: '#fdf7b5' },
   count:   { color: '#ec4899', glow: '#f9a8d4' },
+  dbcore:  { color: '#14b8a6', glow: '#99f6e4' },
+  storage: { color: '#f97316', glow: '#fdba74' },
+  indexing: { color: '#eab308', glow: '#fde047' },
+  query:   { color: '#ef4444', glow: '#fca5a5' },
 }
 
 // Tooltip state
@@ -28,6 +38,50 @@ function onMouseMove(e) {
   const rect = container.value.getBoundingClientRect()
   tooltip.value.x = e.clientX - rect.left + 14
   tooltip.value.y = e.clientY - rect.top  - 10
+
+  if (!graphInstance) return
+
+  const pointerX = e.clientX - rect.left
+  const pointerY = e.clientY - rect.top
+  const zoom = graphInstance.zoom()
+  let nearestNode = null
+  let nearestRatio = Infinity
+
+  graphNodes.forEach(node => {
+    if (node.x == null || node.y == null) return
+    const screen = graphInstance.graph2ScreenCoords(node.x, node.y)
+    const distance = Math.hypot(pointerX - screen.x, pointerY - screen.y)
+    const radius = (6 + (degreeMap[node.id] || 1) * 1.8) * zoom + 6
+    const ratio = distance / radius
+
+    if (ratio <= 1 && ratio < nearestRatio) {
+      nearestNode = node
+      nearestRatio = ratio
+    }
+  })
+
+  if (nearestNode !== hoveredNode) {
+    container.value.style.cursor = nearestNode ? 'pointer' : 'default'
+    updateHighlight(nearestNode)
+    updateTooltip(nearestNode)
+  }
+}
+
+function clearHover() {
+  updateHighlight(null)
+  updateTooltip(null)
+}
+
+function updateHighlight(node) {
+  highlightNodes.clear()
+  highlightLinks.clear()
+  hoveredNode = node || null
+
+  if (node) {
+    highlightNodes.add(node)
+    node.neighbors.forEach(nb => highlightNodes.add(nb))
+    node.links.forEach(link => highlightLinks.add(link))
+  }
 }
 
 onMounted(async () => {
@@ -36,6 +90,7 @@ onMounted(async () => {
   // ── Load JSON ──────────────────────────────────────────────────────────────
   const graphData = await fetch('/graph-data.json').then(r => r.json())
   const { nodes, links } = graphData
+  graphNodes = nodes
 
   // Wait until the container has real dimensions before initialising
   const { width, height } = await new Promise(resolve => {
@@ -53,7 +108,7 @@ onMounted(async () => {
   console.log('[graph] init size:', width, 'x', height)
 
   // Pre-compute degree, neighbors and links on each node (same pattern as official example)
-  const degreeMap = {}
+  degreeMap = {}
   nodes.forEach(n => {
     degreeMap[n.id] = 0
     n.neighbors = []
@@ -73,23 +128,6 @@ onMounted(async () => {
   // val drives force-graph's default hit-detection area
   nodes.forEach(n => { n.val = (degreeMap[n.id] || 1) * 8 })
 
-  // ── Highlight state — store node/link OBJECTS (not IDs) ───────────────────
-  const highlightNodes = new Set()
-  const highlightLinks = new Set()
-  let   hoveredNode    = null
-
-  function updateHighlight(node) {
-    highlightNodes.clear()
-    highlightLinks.clear()
-    hoveredNode = node || null
-
-    if (node) {
-      highlightNodes.add(node)
-      node.neighbors.forEach(nb  => highlightNodes.add(nb))
-      node.links.forEach(link    => highlightLinks.add(link))
-    }
-  }
-
   graphInstance = new ForceGraph(container.value)
     .width(width)
     .height(height)
@@ -97,7 +135,7 @@ onMounted(async () => {
     .autoPauseRedraw(false)
     .graphData(graphData)
     .nodeId('id')
-    .nodeLabel(() => 'id')
+    .nodeLabel(() => '')
     .enablePointerInteraction(true)
     .nodeRelSize(6)
 
@@ -180,19 +218,15 @@ onMounted(async () => {
     })
     .nodePointerAreaPaint((node, color, ctx) => {
       if (node.x == null || !isFinite(node.x)) return
+      const deg = degreeMap[node.id] || 1
+      const radius = 6 + deg * 1.8
       ctx.beginPath()
-      ctx.arc(node.x, node.y, 50, 0, 2 * Math.PI) // 50px test radius
+      ctx.arc(node.x, node.y, radius + 6, 0, 2 * Math.PI)
       ctx.fillStyle = color
       ctx.fill()
     })
 
     // ── Interactions ───────────────────────────────────────────────────────
-    .onNodeHover(node => {
-      console.log('[hover]', node ? node.id : null)
-      container.value.style.cursor = node ? 'pointer' : 'default'
-      updateHighlight(node)
-      updateTooltip(node)
-    })
     .onNodeClick(node => {
       console.log('[click]', node.id, node.link)
       if (node.link) router.go(node.link)
@@ -234,7 +268,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="container" class="graph-wrap" @mousemove="onMouseMove">
+  <div ref="container" class="graph-wrap" @mousemove="onMouseMove" @mouseleave="clearHover">
 
     <Transition name="tip">
       <div
