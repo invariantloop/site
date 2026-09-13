@@ -150,8 +150,15 @@ export default defineConfig({
               { text: '2. External Sorting', link: '/18_2-external-sorting' },
               { text: '3. SELECT Operation', link: '/18_3-select-operation' },
               { text: '4. JOIN Operation', link: '/18_4-join-operation' },
-              { text: '5–6. PROJECT, Set, Aggregate & JOIN Types', link: '/18_5-project-set-and-aggregate-operations' },
-              { text: '7–8. Pipelining & Parallel Query Processing', link: '/18_6-pipelining-and-parallel-query-processing' },
+              { text: '5. PROJECT, Set, Aggregate & JOIN Types', link: '/18_5-project-set-and-aggregate-operations' },
+              { text: '6. Pipelining & Parallel Query Processing', link: '/18_6-pipelining-and-parallel-query-processing' },
+            ]
+          },
+          {
+            text: 'Chapter 6 — Query Optimization',
+            collapsed: true,
+            items: [
+              { text: '1. Query Trees & Heuristic Optimization', link: '/19_1-query-trees-and-heuristic-optimization' },
             ]
           },
         ]
