@@ -159,6 +159,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: '1. Query Trees & Heuristic Optimization', link: '/19_1-query-trees-and-heuristic-optimization' },
+              { text: '2. Choice of Query Execution Plans', link: '/19_2-choice-of-query-execution-plans' },
+              { text: '3. Selectivities & Cost-Based Optimization', link: '/19_3-selectivities-and-cost-based-optimization' },
             ]
           },
         ]
